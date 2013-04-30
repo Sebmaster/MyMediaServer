@@ -1,0 +1,44 @@
+<div>
+    <form class="form-inline">
+        <input class="input-medium" type="text" data-ng-model="path">
+    </form>
+</div>
+
+<input class="btn" type="submit" value="Apply" data-ng-click="apply()">
+<table class="table">
+    <thead>
+        <tr>
+            <th>Foldername</th>
+            <th>Beautified Name</th>
+            <th>Categories</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr data-ng-repeat="file in files | filter: filterExisting | orderBy: ['path']">
+            <td><a class="clickable" data-ng-click="navigate(file)">{{file.folder}}</a></td>
+            <td>
+                <input type="text" data-ng-model="file.name"></td>
+            <td>
+                <div class="btn-group" data-ng-class="{open: file.open}">
+                    <input class="btn" value="{{(file.categories | transform: 'name').join(', ')}}">
+                    <button class="btn dropdown-toggle" data-ng-click="file.open=!file.open;search(file)">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li data-ng-repeat="category in categories">
+                            <a tabindex="-1" data-ng-click="toggleCategory(file, category)">{{category.name}}
+                                <span class="icon-ok pull-left" data-ng-class="{hidden: file.categories.indexOf(category) === -1}"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="progress progress-striped active" data-ng-show="indexing.progress">
+    <div class="bar" style="width: 10%;"></div>
+</div>
+

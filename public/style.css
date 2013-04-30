@@ -1,0 +1,22 @@
+img.small-cover {
+    max-width: 50px;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+@media (max-width: 767px) {
+    nav {
+        text-align: center;
+    }
+
+    nav .nav-wrapper {
+        display: inline-block;
+    }
+
+    nav .nav.nav-list {
+        float: left;
+        text-align: center;
+    }
+}

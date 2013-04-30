@@ -1,0 +1,14 @@
+{
+	"name": "MyMediaServer",
+	"version": "0.0.1",
+	"dependencies": {
+		"express": "3.x",
+		"racer": "0.x",
+		"racer-db-mongo": "x",
+		"request": "x",
+		"underscore": "x"
+	},
+	"scripts": {
+		"start": "node server.js"
+	}
+}

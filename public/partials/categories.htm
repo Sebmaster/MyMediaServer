@@ -1,0 +1,23 @@
+<table class="table table-hover">
+	<thead>
+		<tr>
+            <th></th>
+			<th>Name</th>
+		</tr>
+	</thead>
+	
+	<tbody>
+		<tr class="clickable" data-ng-repeat="category in categories | orderBy: 'order'">
+            <td><div class="btn" data-ng-click="delete(category)"><span class="icon-trash"></span></div></td>
+            <td><a href="#/categories/{{category._id}}">{{category.name}}</a></td>
+		</tr>
+	</tbody>
+</table>
+
+<form data-ng-submit="addCategory()">
+    <dl>
+        <dt>Name</dt>
+        <dd><input class="input-medium" type="text" data-ng-model="name"></dd>
+        <dd><input class="btn" type="submit"></dd>
+    </dl>
+</form>

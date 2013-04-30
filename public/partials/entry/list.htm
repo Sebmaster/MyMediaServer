@@ -1,0 +1,17 @@
+<table class="table table-hover">
+	<thead>
+		<tr>
+			<th>Image</th>
+			<th>Name</th>
+            <th><abbr title="Watched">W</abbr> / <abbr title="Total">T</abbr></th>
+		</tr>
+	</thead>
+	
+	<tbody>
+		<tr class="clickable" data-ng-repeat="entry in entries | orderBy: 'title'" data-ng-click="chooseEntry(entry)">
+			<td><div><img class="thumbnail small-cover" data-ng-src="{{entry.image}}"></div></td>
+			<td>{{entry.title}}</td>
+            <td>{{entry.watched || 0}} / {{entry.episodes.length || '?'}}</td>
+		</tr>
+	</tbody>
+</table>

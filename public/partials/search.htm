@@ -1,0 +1,63 @@
+<form>
+    <input type="search" class="search-query" data-ng-model="search.query" autofocus="autofocus">
+</form>
+
+<div class="row-fluid">
+    <div class="span6">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr data-ng-repeat="entry in search.results.trakt">
+                    <td style="vertical-align: middle" data-ng-click="addToLibrary(entry)">
+                        <span class="btn"><span title="Add to my library" class="icon-th"></span></span>
+                    </td>
+                    <td>
+                        <img class="small-cover thumbnail" data-ng-src="{{entry.image}}"></td>
+                    <td>{{entry.title}}</td>
+                    <td>Show</td>
+                </tr>
+                <tr data-ng-repeat="entry in search.results.movies">
+                    <td style="vertical-align: middle" data-ng-click="addToLibrary(entry)">
+                        <span class="btn"><span title="Add to my library" class="icon-th"></span></span>
+                    </td>
+                    <td>
+                        <img class="small-cover thumbnail" data-ng-src="{{entry.image}}"></td>
+                    <td>{{entry.title}}</td>
+                    <td>Movie</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="span6">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>DataSource</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr data-ng-repeat="entry in search.results.mal">
+                    <td style="vertical-align: middle" data-ng-click="addToLibrary(entry)">
+                        <span class="btn"><span title="Add to my library" class="icon-th"></span></span>
+                    </td>
+                    <td>
+                        <img class="small-cover thumbnail" data-ng-src="{{entry.image}}"></td>
+                    <td>{{entry.title}}</td>
+                    <td>{{entry.type}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

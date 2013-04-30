@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html data-ng-app="MyMediaServer">
+<head>
+    <title>{{$root.title()}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
+    <link href="/style.css" rel="stylesheet">
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.4/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.4/angular-sanitize.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+    <script src="/script.js"></script>
+    <script src="/userdata.js"></script>
+    <script src="/app.js"></script>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <nav class="span2">
+                <div class="nav-wrapper">
+                    <ul class="nav nav-list">
+                        <li class="nav-header"><a href="#/">Home</a></li>
+                        <li><a href="#/search">New</a></li>
+                        <li><a href="#/assign">Import</a></li>
+                    </ul>
+                    <ul class="nav nav-list">
+                        <li class="nav-header"><a href="#/entries/">My Library</a></li>
+                    </ul>
+                    <ul class="nav nav-list">
+                        <li class="nav-header"><a>Settings</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div id="content" data-ng-view data-ng-cloak class="span10"></div>
+        </div>
+    </div>
+</body>
+</html>

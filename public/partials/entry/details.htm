@@ -1,0 +1,174 @@
+<h3>{{entry.title}}</h3>
+<div class="row-fluid">
+    <div class="span2">
+        <div class="thumbnail text-center">
+            <img data-ng-src="{{entry.image}}">
+        </div>
+
+        <dl>
+            <dt>Watched</dt>
+            <dd>{{entry.watched || 0}} / {{entry.episodes.length || '?'}}</dd>
+            <dt>Genres</dt>
+            <dd>{{entry.genres.join(', ')}}</dd>
+        </dl>
+    </div>
+
+    <p class="span5" data-ng-bind-html="entry.synopsis"></p>
+    <div class="span5 tabbable">
+        <ul class="nav nav-tabs">
+            <li data-ng-repeat="season in entry.seasons" data-ng-class="{active: $first}"><a href="#tab{{$index}}" data-toggle="tab">{{season.season}}. season</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane row-fluid" data-ng-repeat="season in entry.seasons" id="tab{{$index}}" data-ng-class="{active: $first}">
+                <div class="span2">
+                    <img class="thumbnail" data-ng-src="{{season.image}}">
+                </div>
+
+                <div class="span10">
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Number</th>
+                                <th>Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="episode in entry.episodes | filter: { season: season.season + '' }">
+                                <td>{{episode.episode}}</td>
+                                <td>{{episode.title}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="accordion" id="accordion">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#detail-download">Download</a>
+        </div>
+
+        <div id="detail-download" class="accordion-body collapse">
+            <div class="accordion-inner">
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#detail-files">Files</a>
+        </div>
+
+        <div id="detail-files" class="accordion-body collapse">
+            <div class="accordion-inner">
+                <form class="form-inline">
+                    <input type="text" data-ng-model="assignRegex">
+                    <button class="btn" data-ng-click="autoAssign()">Auto Assign</button>
+                    <button class="btn" data-ng-click="applyEpisodes()">Apply</button>
+                </form>
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Path</th>
+                            <th>Season</th>
+                            <th>Episode</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr data-ng-repeat="file in files | orderBy: ['path']">
+                            <td>{{file.path}}</td>
+                            <td>
+
+                                <select class="input-large" data-ng-model="file.season" data-ng-options="season.season for season in entry.seasons"></select>
+                            </td>
+                            <td>
+                                <input class="input-mini" type="number" min="1" step="1" data-ng-model="file.episode"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#detail-datasources">Datasources</a>
+        </div>
+
+        <div id="detail-datasources" class="accordion-body collapse">
+            <div class="accordion-inner">
+                <form class="form-search">
+                    <input type="search" data-ng-model="search.query" class="search-query" placeholder="Search datasource...">
+                </form>
+
+                <div class="row-fluid">
+                    <div class="span4">
+                        <h4>TraktTV - Shows</h4>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr class="clickable" data-ng-repeat="entry in search.results.trakt" data-ng-click="chooseTrakt(entry)">
+                                    <td>
+                                        <img class="thumbnail small-cover" data-ng-src="{{entry.images.poster}}"></td>
+                                    <td>{{entry.title}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span4">
+                            <h4>TraktTV - Movies</h4>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Name</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr class="clickable" data-ng-repeat="entry in search.results.movies" data-ng-click="chooseTraktMovie(entry)">
+                                        <td>
+                                            <img class="thumbnail small-cover" data-ng-src="{{entry.images.poster}}"></td>
+                                        <td>{{entry.title}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="span4">
+                            <h4>MyAnimeList</h4>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Name</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr class="clickable" data-ng-repeat="entry in search.results.mal" data-ng-click="chooseMAL(entry)">
+                                        <td>
+                                            <img class="thumbnail small-cover" data-ng-src="{{entry.image_url}}"></td>
+                                        <td>{{entry.title}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
