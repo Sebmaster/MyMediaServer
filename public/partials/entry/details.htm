@@ -14,13 +14,14 @@
     </div>
 
     <p class="span5" data-ng-bind-html="entry.synopsis"></p>
-    <div class="span5 tabbable">
+    <div class="span5 tabbable" data-ng-init="activeSeasonTab = 0">
         <ul class="nav nav-tabs">
-            <li data-ng-repeat="season in entry.seasons" data-ng-class="{active: $first}"><a href="#tab{{$index}}" data-toggle="tab">{{season.season}}. season</a></li>
+            <li data-ng-repeat="season in entry.seasons | orderBy: 'season'" data-ng-class="{active: $index == activeSeasonTab}"><a class="clickable" data-ng-click="$parent.activeSeasonTab = $index">{{season.season}}. season</a></li>
+            <li class="pull-right"><span><a>Refresh metadata</a></span></li>
         </ul>
 
         <div class="tab-content">
-            <div class="tab-pane row-fluid" data-ng-repeat="season in entry.seasons" id="tab{{$index}}" data-ng-class="{active: $first}">
+            <div class="tab-pane row-fluid" data-ng-repeat="season in entry.seasons | orderBy: 'season'" data-ng-class="{active: $index == activeSeasonTab}">
                 <div class="span2">
                     <img class="thumbnail" data-ng-src="{{season.image}}">
                 </div>
@@ -46,13 +47,13 @@
     </div>
 </div>
 
-<div class="accordion" id="accordion">
+<div class="accordion" id="accordion" data-ng-init="activeDetailAccordion = null">
     <div class="accordion-group">
         <div class="accordion-heading">
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#detail-download">Download</a>
+            <a class="accordion-toggle clickable" data-ng-click="activeDetailAccordion = 0">Download</a>
         </div>
 
-        <div id="detail-download" class="accordion-body collapse">
+        <div id="detail-download" class="accordion-body" data-ng-class="{collapse: activeDetailAccordion != 0}">
             <div class="accordion-inner">
                 
             </div>
@@ -61,10 +62,10 @@
 
     <div class="accordion-group">
         <div class="accordion-heading">
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#detail-files">Files</a>
+            <a class="accordion-toggle clickable" data-ng-click="activeDetailAccordion = 1">Files</a>
         </div>
 
-        <div id="detail-files" class="accordion-body collapse">
+        <div id="detail-files" class="accordion-body" data-ng-class="{collapse: activeDetailAccordion != 1}">
             <div class="accordion-inner">
                 <form class="form-inline">
                     <input type="text" data-ng-model="assignRegex">
@@ -98,10 +99,10 @@
 
     <div class="accordion-group">
         <div class="accordion-heading">
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#detail-datasources">Datasources</a>
+            <a class="accordion-toggle clickable" data-ng-click="activeDetailAccordion = 2">Datasources</a>
         </div>
 
-        <div id="detail-datasources" class="accordion-body collapse">
+        <div id="detail-datasources" class="accordion-body" data-ng-class="{collapse: activeDetailAccordion != 2}">
             <div class="accordion-inner">
                 <form class="form-search">
                     <input type="search" data-ng-model="search.query" class="search-query" placeholder="Search datasource...">
