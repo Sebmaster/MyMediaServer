@@ -6,7 +6,7 @@ var app = express();
 var http = require('http');
 var server = http.createServer(app);
 
-racer.use(racer.logPlugin)
+racer.use(racer.logPlugin);
 racer.use(require('racer-db-mongo'));
 
 var store = racer.createStore({
