@@ -164,7 +164,7 @@ function AssignCtrl($scope, $http, $route, model) {
 				$scope.files[$scope.files.length] = {
 					path: $scope.path + '/' + files[i],
 					folder: files[i],
-					name: files[i].replace(/\.|_/g, ' ').replace(/  /g, ' ').replace(/\d+p|\d+x\d+|\[.*?\]/g, '').replace(/\(\s+\)/g, ''),
+					name: files[i].replace(/\.|_/g, ' ').replace(/ {2}/g, ' ').replace(/\d+p|\d+x\d+|\[.*?\]/g, '').replace(/\(\s+\)/g, ''),
 					open: false
 				};
 			}
@@ -234,7 +234,7 @@ function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 			for (var i = 0; i < files.length; ++i) {
 				$scope.files[i] = {
 					path: files[i],
-					beautified: files[i].replace(/\.|_/g, ' ').replace(/  /g, ' ').replace(/\d+p|\d+x\d+|\[.*?\]/g, '').replace(/\(\s+\)/g, '').replace(/\..+$/g, '')
+					beautified: files[i].replace(/\.|_/g, ' ').replace(/ {2}/g, ' ').replace(/\d+p|\d+x\d+|\[.*?\]/g, '').replace(/\(\s+\)/g, '').replace(/\..+$/g, '')
 				};
 			}
 
@@ -283,7 +283,7 @@ function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 				if (!match[2]) {
 					match[2] = 1; // if no season is found, assume first
 				} else {
-					match[2] = parseInt(match[2]);
+					match[2] = parseInt(match[2], 10);
 				}
 
 				file.season = _.filter($scope.entry.seasons, function (season) { return season.season == match[2]; })[0];
@@ -334,7 +334,7 @@ function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 			$http.get('/methods/entries/refreshMetadata?id=' + $scope.entry.id);
 		}
 	};
-};
+}
 
 EntryDetailCtrl.resolve = {
 	model: function (racer) {
