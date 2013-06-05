@@ -1,10 +1,14 @@
 var module = angular.module('racer.js', [], function ($provide) {
 	function extendObject(from, to) {
+		if (from === to) return to;
+
 		if (from instanceof Array && to instanceof Array) {
 			for (var i = 0; i < from.length; ++i) {
 				to[i] = extendObject(from[i], to[i]);
 			}
 			to.splice(from.length, to.length);
+
+			return to;
 		} else if (from instanceof Object && to instanceof Object) {
 			for (var key in to) {
 				if (typeof from[key] === 'undefined') {
@@ -15,11 +19,11 @@ var module = angular.module('racer.js', [], function ($provide) {
 			for (var key in from) {
 				to[key] = extendObject(from[key], to[key]);
 			}
-		} else if (from !== to) {
+
+			return to;
+		} else {
 			return from;
 		}
-
-		return to;
 	}
 
 	var racer = require('racer');
