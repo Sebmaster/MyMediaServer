@@ -6,27 +6,28 @@ var app = express();
 var http = require('http');
 var server = http.createServer(app);
 
-racer.use(racer.logPlugin);
-racer.use(require('racer-db-mongo'));
-
 var store = racer.createStore({
-	listen: server,
-	db: {
-		type: 'Mongo',
-		uri: 'mongodb://'
-	}
+	server: server,
+	db: require('livedb-mongo')('mongodb://', { safe: true })
 });
 
-var serverModel = store.createModel();
-serverModel.subscribe('entries', function () { });
-
 app.use(express.static(__dirname + '/public'));
+app.use(require('racer-browserchannel')(store));
 app.use(express.bodyParser());
 
 app.get('/', function (req, res) {
 	res.sendfile(__dirname + '/public/index.htm');
 });
 
+var serverModel = store.createModel();
+serverModel.subscribe('entries', function (err) { });
+serverModel.on('insert', '$queries.["entries",{},null].ids', function (idx, id) {
+	entryManagment.refreshMetadata(serverModel, id);
+});
+
+app.get('/methods/files/list', function (req, res) {
+	res.json(['abc']);
+});
 
 app.get('/methods/entries/refreshMetadata', function (req, res) {
 	entryManagment.refreshMetadata(serverModel, req.query.id);
@@ -40,20 +41,18 @@ app.get('/model', function (req, res) {
 			res.status(500);
 			res.send(err);
 		} else {
-			model.bundle(function (bundle) {
-				res.send(bundle.toString());
+			model.bundle(function (err, bundle) {
+				res.send(JSON.stringify(bundle));
 			});
 		}
 	});
 });
 
-racer.js({ entry: __dirname + '/racer-angular.js' }, function (err, js) {
+store.bundle(__dirname + '/racer-angular.js', function (err, js) {
 	app.get('/script.js', function (req, res) {
 		res.type('js');
 		res.send(js);
 	});
 });
-
-
 
 server.listen(8081);

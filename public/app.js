@@ -79,17 +79,18 @@ function SearchCtrl($scope, $http, model) {
 	$scope.search = { query: null, results: { mal: [], trakt: [], movies: [] } };
 
 	$scope.addToLibrary = function (entry) {
-		model.set('entries.' + model.id(), {
+		model.add('entries', {
 			title: entry.title,
 			paths: [],
 			metadataProvider: entry.metadataProvider,
 			metadataId: entry.metadataId,
 			seasons: [],
 			episodes: []
-		}, function (err, path, entry) {
-			if (err) return;
-
-			$http.get('/methods/entries/refreshMetadata?id=' + entry.id);
+		}, function (err) {
+			if (err) {
+				console.error(err);
+				return;
+			}
 		});
 	};
 
@@ -148,7 +149,7 @@ SearchCtrl.resolve.model.$inject = ['racer'];
 SearchCtrl.$inject = ['$scope', '$http', 'model'];
 
 function AssignCtrl($scope, $http, $route, model) {
-	var entries = model.get().entries;
+	var entries = model.get('entries');
 
 	function refreshFiles() {
 		if ($scope.path[$scope.path.length - 1] === '/') {
@@ -156,8 +157,8 @@ function AssignCtrl($scope, $http, $route, model) {
 		}
 		var path = $scope.path;
 
-		Meteor.call('findFiles', path, function (err, files) {
-			if (path != $scope.path || err) return;
+		$http.get('/methods/files/list').success(function (files) {
+			if (path != $scope.path) return;
 
 			$scope.files = [];
 			for (var i = 0; i < files.length; ++i) {
@@ -168,15 +169,19 @@ function AssignCtrl($scope, $http, $route, model) {
 					open: false
 				};
 			}
-			$scope.$apply();
 		});
 	}
 
 	$scope.$watch('path', refreshFiles);
 
 	$scope.filterExisting = function (x) {
-		var ex = entries.findOne({ path: x.path });
-		return !ex.id;
+		for (var i = 0; i < entries.length; ++i) {
+			if (entries[i].path === x.path) {
+				return false;
+			}
+		}
+
+		return true;
 	};
 
 	$scope.navigate = function (file) {
@@ -198,7 +203,7 @@ AssignCtrl.resolve.model.$inject = ['racer'];
 AssignCtrl.$inject = ['$scope', '$http', '$route', 'model'];
 
 function EntryListCtrl($scope, $routeParams, model, $location, $root) {
-	$scope.entries = model.get().entries;
+	$scope.entries = model.get('entries');
 	$scope.chooseEntry = function (entry) {
 		$location.path('/entry/' + entry.id);
 	};
