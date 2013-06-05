@@ -1,4 +1,4 @@
-var module = angular.module('racer.js', [], function ($provide) {
+angular.module('racer.js', [], function ($provide) {
 	function extendObject(from, to) {
 		if (from === to) return to;
 
@@ -9,7 +9,7 @@ var module = angular.module('racer.js', [], function ($provide) {
 			to.splice(from.length, to.length);
 
 			return to;
-		} else if (from.constructor === Object && to.constructor === Object) {
+		} else if (from.constructor === Object && to && to.constructor === Object) {
 			for (var key in to) {
 				if (typeof from[key] === 'undefined') {
 					delete to[key];
@@ -25,6 +25,10 @@ var module = angular.module('racer.js', [], function ($provide) {
 			return from;
 		}
 	}
+
+	var setImmediate = window && window.setImmediate ? window.setImmediate : function (fn) {
+		setTimeout(fn, 0);
+	};
 
 	var racer = require('racer');
 
@@ -42,10 +46,10 @@ var module = angular.module('racer.js', [], function ($provide) {
 				if (!paths[path]) {
 					paths[path] = oldGet.call(model, path);
 
-					model.on('all', path ? path + '.**' : '**', function () {
+					model.on('all', path ? path + '**' : '**', function () {
 						var newData = oldGet.call(model, path);
 						paths[path] = extendObject(newData, paths[path]);
-						$rootScope.$apply();
+						setImmediate($rootScope.$apply.bind($rootScope));
 					});
 				}
 
@@ -53,6 +57,7 @@ var module = angular.module('racer.js', [], function ($provide) {
 			};
 
 			def.resolve(model);
+			$rootScope.$apply();
 		});
 
 		return def.promise;
