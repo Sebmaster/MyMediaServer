@@ -2,14 +2,14 @@ var module = angular.module('racer.js', [], function ($provide) {
 	function extendObject(from, to) {
 		if (from === to) return to;
 
-		if (from instanceof Array && to instanceof Array) {
+		if (from.constructor === Array && to.constructor === Array) {
 			for (var i = 0; i < from.length; ++i) {
 				to[i] = extendObject(from[i], to[i]);
 			}
 			to.splice(from.length, to.length);
 
 			return to;
-		} else if (from instanceof Object && to instanceof Object) {
+		} else if (from.constructor === Object && to.constructor === Object) {
 			for (var key in to) {
 				if (typeof from[key] === 'undefined') {
 					delete to[key];
