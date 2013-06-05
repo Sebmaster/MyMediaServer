@@ -38,7 +38,7 @@ var module = angular.module('racer.js', [], function ($provide) {
 				if (!paths[path]) {
 					paths[path] = oldGet.call(model, path);
 
-					model.on('all', path ? path : '**', function () {
+					model.on('all', path ? path + '.**' : '**', function () {
 						var newData = oldGet.call(model, path);
 						paths[path] = extendObject(newData, paths[path]);
 						$rootScope.$apply();
