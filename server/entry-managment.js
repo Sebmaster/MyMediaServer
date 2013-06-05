@@ -3,6 +3,7 @@ var _ = require('underscore');
 require('../public/userdata');
 
 function updateDb(model, entry) {
+	entry.lastUpdated = Date.now();
 	model.set('entries.' + entry.id, entry);
 }
 
@@ -66,7 +67,10 @@ exports.refreshMetadata = function (model, id) {
 		entries = model.get('entries');
 	}
 
+	var maxUpdated = Date.now() - 3600 * 24 * 1000;
 	_.forEach(entries, function (entry) {
+		if (entry.lastUpdated >= maxUpdated) return;
+
 		if (entry.metadataProvider === 'trakt') {
 			request('http://api.trakt.tv/show/summary.json/' + Trakt.apiKey + '/' + entry.metadataId + '/true/', function (err, resp, data) {
 				if (err) throw e;
