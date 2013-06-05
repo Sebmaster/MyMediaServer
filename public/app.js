@@ -6,8 +6,8 @@ angular.module('MyMediaServer', ['racer.js', 'ngSanitize']).
 			when('/', { templateUrl: '/partials/home.htm', controller: IndexCtrl, resolve: IndexCtrl.resolve }).
 			when('/search', { templateUrl: '/partials/search.htm', controller: SearchCtrl, resolve: SearchCtrl.resolve }).
 			when('/assign', { templateUrl: '/partials/assign.htm', controller: AssignCtrl, resolve: AssignCtrl.resolve }).
-			when('/entries/:id', { templateUrl: '/partials/entry/list.htm', controller: EntryListCtrl, resolve: EntryListCtrl.resolve }).
-			when('/entry/:id', { templateUrl: '/partials/entry/details.htm', controller: EntryDetailCtrl, resolve: EntryDetailCtrl.resolve }).
+			when('/entries', { templateUrl: '/partials/entry/list.htm', controller: EntryListCtrl, resolve: EntryListCtrl.resolve }).
+			when('/entries/:id', { templateUrl: '/partials/entry/details.htm', controller: EntryDetailCtrl, resolve: EntryDetailCtrl.resolve }).
 			otherwise({redirectTo: '/'});
 	}]).
 	filter('transform', ['$parse', function ($parse) {
@@ -205,7 +205,7 @@ AssignCtrl.$inject = ['$scope', '$http', '$route', 'model'];
 function EntryListCtrl($scope, $routeParams, model, $location, $root) {
 	$scope.entries = model.get('entries');
 	$scope.chooseEntry = function (entry) {
-		$location.path('/entry/' + entry.id);
+		$location.path('/entries/' + entry.id);
 	};
 
 	$root.title('My library');
