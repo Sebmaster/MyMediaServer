@@ -1,6 +1,14 @@
 <h3>{{entry.title}}</h3>
 <div class="row-fluid">
     <div class="span2">
+        <div class="btn-toolbar text-center">
+            <div class="btn-group">
+                <a class="btn" href="#/entries/{{entry.id}}/download"><span class="icon-download"></span></a>
+                <a class="btn" href="#/entries/{{entry.id}}/path"><span class="icon-folder-open"></span></a>
+                <a class="btn" href="#/entries/{{entry.id}}/seasons"><span class="icon-cog"></span></a>
+            </div>
+        </div>
+
         <div class="thumbnail text-center">
             <img data-ng-src="{{entry.image}}">
         </div>
@@ -16,8 +24,9 @@
     <p class="span5" data-ng-bind-html="entry.synopsis"></p>
     <div class="span5 tabbable" data-ng-init="activeSeasonTab = 0">
         <ul class="nav nav-tabs">
-            <li data-ng-repeat="season in entry.seasons | orderBy: 'season'" data-ng-class="{active: $index == activeSeasonTab}"><a class="clickable" data-ng-click="$parent.activeSeasonTab = $index">{{season.season}}. season</a></li>
-            <li class="pull-right"><span><a>Refresh metadata</a></span></li>
+            <li data-ng-repeat="season in entry.seasons | orderBy: 'season'" data-ng-class="{active: $index == activeSeasonTab}">
+                <a class="clickable" data-ng-click="$parent.activeSeasonTab = $index">{{season.season}}. season</a>
+            </li>
         </ul>
 
         <div class="tab-content">
@@ -46,7 +55,7 @@
         </div>
     </div>
 </div>
-
+<!--
 <div class="accordion" id="accordion" data-ng-init="activeDetailAccordion = null">
     <div class="accordion-group">
         <div class="accordion-heading">
@@ -56,43 +65,6 @@
         <div id="detail-download" class="accordion-body" data-ng-class="{collapse: activeDetailAccordion != 0}">
             <div class="accordion-inner">
                 
-            </div>
-        </div>
-    </div>
-
-    <div class="accordion-group">
-        <div class="accordion-heading">
-            <a class="accordion-toggle clickable" data-ng-click="activeDetailAccordion = 1">Files</a>
-        </div>
-
-        <div id="detail-files" class="accordion-body" data-ng-class="{collapse: activeDetailAccordion != 1}">
-            <div class="accordion-inner">
-                <form class="form-inline">
-                    <input type="text" data-ng-model="assignRegex">
-                    <button class="btn" data-ng-click="autoAssign()">Auto Assign</button>
-                    <button class="btn" data-ng-click="applyEpisodes()">Apply</button>
-                </form>
-                <table class="table table-condensed">
-                    <thead>
-                        <tr>
-                            <th>Path</th>
-                            <th>Season</th>
-                            <th>Episode</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <tr data-ng-repeat="file in files | orderBy: ['path']">
-                            <td>{{file.path}}</td>
-                            <td>
-
-                                <select class="input-large" data-ng-model="file.season" data-ng-options="season.season for season in entry.seasons"></select>
-                            </td>
-                            <td>
-                                <input class="input-mini" type="number" min="1" step="1" data-ng-model="file.episode"></td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
     </div>
@@ -173,3 +145,4 @@
         </div>
     </div>
 </div>
+-->

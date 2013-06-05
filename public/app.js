@@ -8,6 +8,7 @@ angular.module('MyMediaServer', ['racer.js', 'ngSanitize']).
 			when('/assign', { templateUrl: '/partials/assign.htm', controller: AssignCtrl, resolve: AssignCtrl.resolve }).
 			when('/entries', { templateUrl: '/partials/entry/list.htm', controller: EntryListCtrl, resolve: EntryListCtrl.resolve }).
 			when('/entries/:id', { templateUrl: '/partials/entry/details.htm', controller: EntryDetailCtrl, resolve: EntryDetailCtrl.resolve }).
+			when('/entries/:id/path', { templateUrl: '/partials/entry/path.htm', controller: EntryPathCtrl, resolve: EntryPathCtrl.resolve }).
 			otherwise({redirectTo: '/'});
 	}]).
 	filter('transform', ['$parse', function ($parse) {
@@ -221,16 +222,22 @@ EntryListCtrl.resolve.model.$inject = ['racer'];
 EntryListCtrl.$inject = ['$scope', '$routeParams', 'model', '$location', '$rootScope'];
 
 function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
-	$scope.search = { query: null, results: { mal: [], trakt: [] } };
-
 	$scope.entry = model.get('entries.' + $routeParams.id);
-	$scope.$watch('entry.title', function () {
-		$scope.search.query = $scope.entry.title;
+
+	$scope.$watch('entry.id', function () {
+		if (!$scope.entry.id) return;
+
+		$http.get('/methods/entries/refreshMetadata?id=' + $scope.entry.id);
 	});
 
 	$root.title(function () {
 		return $scope.entry.title;
 	});
+	/*
+	$scope.$watch('entry.title', function () {
+		$scope.search.query = $scope.entry.title;
+	});
+
 	$scope.$watch('entry.path', function () {
 		Meteor.call('findFiles', $scope.entry.path, true, function (err, files) {
 			if (err) return;
@@ -246,16 +253,10 @@ function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 			$scope.$apply();
 		});
 	});
-
+	
 	$scope.$watch('search.query', function () {
 		var query = $scope.search.query;
 		if (query === undefined) return;
-		/*
-		Meteor.call('requestShana', 'ore no imouto', function (err, data) {
-			if (err) return console.error(err);
-
-			console.log(data);
-		});*/
 
 		$http.get('http://mal-api.com/anime/search?q=' + encodeURIComponent(query)).success(function (data) {
 			if ($scope.search.query !== query) return;
@@ -273,35 +274,7 @@ function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 		});
 	});
 
-	$scope.autoAssign = function () {
-		if ($scope.entry.seasons.length === 0) return;
-
-		var regexes = $scope.assignRegex ? [new RegExp($scope.assignRegex, 'i')] : [/S?((\d+)(e|x))(\d+)/i, /()()()(\d+)/i];
-
-		for (var i = 0; i < $scope.files.length; ++i) {
-			var file = $scope.files[i];
-
-			for (var j = 0; j < regexes.length; ++j) {
-				var match = file.beautified.match(regexes[j]);
-				if (!match) continue;
-
-				if (!match[2]) {
-					match[2] = 1; // if no season is found, assume first
-				} else {
-					match[2] = parseInt(match[2], 10);
-				}
-
-				file.season = _.filter($scope.entry.seasons, function (season) { return season.season == match[2]; })[0];
-				file.episode = parseInt(match[4], 10);
-				break;
-			}
-		}
-	};
-
-	$scope.applyEpisodes = function () {
-
-	};
-
+	
 	$scope.chooseTrakt = function (trakt) {
 		if (!$scope.entry.metadataProvider) {
 			$scope.entry.metadataProvider = 'trakt';
@@ -338,7 +311,7 @@ function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 
 			$http.get('/methods/entries/refreshMetadata?id=' + $scope.entry.id);
 		}
-	};
+	};*/
 }
 
 EntryDetailCtrl.resolve = {
@@ -349,3 +322,47 @@ EntryDetailCtrl.resolve = {
 EntryDetailCtrl.resolve.model.$inject = ['racer'];
 
 EntryDetailCtrl.$inject = ['$scope', '$routeParams', 'model', '$http', '$rootScope'];
+
+function EntryPathCtrl($scope, $routeParams, model, $http, $root) {
+	$scope.assignRegex = '';
+
+	$scope.entry = model.get('entries.' + $routeParams.id);
+
+	$root.title(function () {
+		return 'Path - ' + $scope.entry.title;
+	});
+
+	$scope.autoAssign = function () {
+		if ($scope.entry.seasons.length === 0) return;
+
+		var regexes = $scope.assignRegex ? [new RegExp($scope.assignRegex, 'i')] : [/S?((\d+)(e|x))(\d+)/i, /()()()(\d+)/i];
+
+		for (var i = 0; i < $scope.files.length; ++i) {
+			var file = $scope.files[i];
+
+			for (var j = 0; j < regexes.length; ++j) {
+				var match = file.beautified.match(regexes[j]);
+				if (!match) continue;
+
+				if (!match[2]) {
+					match[2] = 1; // if no season is found, assume first
+				} else {
+					match[2] = parseInt(match[2], 10);
+				}
+
+				file.season = _.filter($scope.entry.seasons, function (season) { return season.season == match[2]; })[0];
+				file.episode = parseInt(match[4], 10);
+				break;
+			}
+		}
+	};
+}
+
+EntryPathCtrl.resolve = {
+	model: function (racer) {
+		return racer;
+	}
+};
+EntryPathCtrl.resolve.model.$inject = ['racer'];
+
+EntryPathCtrl.$inject = ['$scope', '$routeParams', 'model', '$http', '$rootScope'];

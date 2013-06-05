@@ -1,0 +1,28 @@
+﻿<h3>{{entry.title}}</h3>
+<form class="form-inline">
+    <input type="text" data-ng-model="assignRegex" placeholder="Episoderegex">
+    <button class="btn" data-ng-click="autoAssign()">Auto Assign</button>
+    <button class="btn" data-ng-click="applyEpisodes()">Apply</button>
+</form>
+
+<table class="table table-condensed">
+    <thead>
+        <tr>
+            <th>Path</th>
+            <th>Season</th>
+            <th>Episode</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr data-ng-repeat="file in files | orderBy: ['path']">
+            <td>{{file.path}}</td>
+            <td>
+
+                <select class="input-large" data-ng-model="file.season" data-ng-options="season.season for season in entry.seasons"></select>
+            </td>
+            <td>
+                <input class="input-mini" type="number" min="1" step="1" data-ng-model="file.episode"></td>
+        </tr>
+    </tbody>
+</table>
