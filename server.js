@@ -6,7 +6,7 @@ var entryManagment = require('./server/entry-managment');
 
 var store = racer.createStore({
 	server: server,
-	db: require('livedb-mongo')('mongodb://', { safe: true })
+	db: require('livedb-mongo')('mongodb://' + config.mongoUrl, { safe: true })
 });
 
 var serverModel = store.createModel();
