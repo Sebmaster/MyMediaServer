@@ -22,7 +22,7 @@ app.get('/', function (req, res) {
 
 var serverModel = store.createModel();
 serverModel.subscribe('entries', function (err) { });
-serverModel.on('insert', '$queries.["entries",{},null].ids', function (idx, id) {
+serverModel.on('insert', '$queries.entries.ids', function (idx, id) {
 	entryManagment.refreshMetadata(serverModel, id);
 });
 
