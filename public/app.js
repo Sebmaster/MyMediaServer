@@ -76,8 +76,8 @@ function IndexCtrl($scope) {
 
 IndexCtrl.$inject = ['$scope'];
 
-function SearchCtrl($scope, $http, model) {
-	$scope.search = { query: null, results: { mal: [], trakt: [], movies: [] } };
+function SearchCtrl($scope, $http, $location, model) {
+	$scope.search = { query: $location.search().query, results: { mal: [], trakt: [], movies: [] } };
 
 	$scope.addToLibrary = function (entry) {
 		model.add('entries', {
@@ -96,6 +96,9 @@ function SearchCtrl($scope, $http, model) {
 	};
 
 	$scope.$watch('search.query', function (newVal) {
+		$location.search('query', $scope.search.query ? $scope.search.query : null);
+		$location.replace();
+
 		$scope.search.results = { mal: [], trakt: [], movies: [] };
 		if (!$scope.search.query) return;
 
@@ -147,7 +150,7 @@ SearchCtrl.resolve = {
 };
 SearchCtrl.resolve.model.$inject = ['racer'];
 
-SearchCtrl.$inject = ['$scope', '$http', 'model'];
+SearchCtrl.$inject = ['$scope', '$http', '$location', 'model'];
 
 function AssignCtrl($scope, $http, $location, model) {
 	var entries = model.get('entries');
