@@ -2,6 +2,7 @@
 var express = require('express');
 var config = require('./config');
 var utils = require('./utils');
+var entryManagment = require('./server/entry-managment');
 
 var store = racer.createStore({
 	server: server,
@@ -10,7 +11,7 @@ var store = racer.createStore({
 
 var serverModel = store.createModel();
 serverModel.subscribe('entries', function (err) { });
-serverModel.on('insert', '$queries.entries.ids', function (idx, id) {
+serverModel.on('insert', '$queries.["entries",{},null].ids', function (idx, id) {
 	entryManagment.refreshMetadata(serverModel, id);
 });
 
