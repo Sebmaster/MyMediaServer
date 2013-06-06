@@ -1,6 +1,6 @@
 ﻿var request = require('request');
 var _ = require('underscore');
-require('../public/userdata');
+var config = require('../config.js');
 
 function updateDb(model, entry) {
 	entry.lastUpdated = Date.now();
@@ -72,7 +72,7 @@ exports.refreshMetadata = function (model, id) {
 		if (entry.lastUpdated >= maxUpdated) return;
 
 		if (entry.metadataProvider === 'trakt') {
-			request('http://api.trakt.tv/show/summary.json/' + Trakt.apiKey + '/' + entry.metadataId + '/true/', function (err, resp, data) {
+			request('http://api.trakt.tv/show/summary.json/' + config.trakt.apiKey + '/' + entry.metadataId + '/true/', function (err, resp, data) {
 				if (err) throw e;
 				data = JSON.parse(data);
 
@@ -80,7 +80,7 @@ exports.refreshMetadata = function (model, id) {
 				updateDb(model, entry);
 			});
 		} else if (entry.metadataProvider === 'trakt-movie') {
-			request('http://api.trakt.tv/show/summary.json/' + Trakt.apiKey + '/' + entry.metadataId + '/true/', function (err, resp, data) {
+			request('http://api.trakt.tv/show/summary.json/' + config.trakt.apiKey + '/' + entry.metadataId + '/true/', function (err, resp, data) {
 				if (err) throw e;
 				data = JSON.parse(data);
 

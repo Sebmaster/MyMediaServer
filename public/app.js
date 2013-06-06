@@ -112,7 +112,7 @@ function SearchCtrl($scope, $http, model) {
 			});
 		});
 
-		$http.jsonp('http://api.trakt.tv/search/shows.json/' + Trakt.apiKey + '/' + encodeURIComponent(newVal).replace(/%20/g, '+').replace(/%3A/g, ':') + '?callback=JSON_CALLBACK').success(function (data) {
+		$http.jsonp('http://api.trakt.tv/search/shows.json/' + Config.Trakt.apiKey + '/' + encodeURIComponent(newVal).replace(/%20/g, '+').replace(/%3A/g, ':') + '?callback=JSON_CALLBACK').success(function (data) {
 			if ($scope.search.query !== newVal) return;
 			$scope.search.results.trakt = _.map(data, function (entry) {
 				return {
@@ -125,7 +125,7 @@ function SearchCtrl($scope, $http, model) {
 			});
 		});
 
-		$http.jsonp('http://api.trakt.tv/search/movies.json/' + Trakt.apiKey + '/' + encodeURIComponent(newVal).replace(/%20/g, '+').replace(/%3A/g, ':') + '?callback=JSON_CALLBACK').success(function (data) {
+		$http.jsonp('http://api.trakt.tv/search/movies.json/' + Config.Trakt.apiKey + '/' + encodeURIComponent(newVal).replace(/%20/g, '+').replace(/%3A/g, ':') + '?callback=JSON_CALLBACK').success(function (data) {
 			if ($scope.search.query !== newVal) return;
 			$scope.search.results.movies = _.map(data, function (entry) {
 				return {
@@ -263,12 +263,12 @@ function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 			$scope.search.results.mal = data;
 		});
 
-		$http.jsonp('http://api.trakt.tv/search/shows.json/' + Trakt.apiKey + '/' + encodeURIComponent(query).replace(/%20/g, '+').replace(/%3A/g, ':') + '?callback=JSON_CALLBACK').success(function (data) {
+		$http.jsonp('http://api.trakt.tv/search/shows.json/' + Config.Trakt.apiKey + '/' + encodeURIComponent(query).replace(/%20/g, '+').replace(/%3A/g, ':') + '?callback=JSON_CALLBACK').success(function (data) {
 			if ($scope.search.query !== query) return;
 			$scope.search.results.trakt = data;
 		});
 
-		$http.jsonp('http://api.trakt.tv/search/movies.json/' + Trakt.apiKey + '/' + encodeURIComponent(query).replace(/%20/g, '+').replace(/%3A/g, ':') + '?callback=JSON_CALLBACK').success(function (data) {
+		$http.jsonp('http://api.trakt.tv/search/movies.json/' + Config.Trakt.apiKey + '/' + encodeURIComponent(query).replace(/%20/g, '+').replace(/%3A/g, ':') + '?callback=JSON_CALLBACK').success(function (data) {
 			if ($scope.search.query !== query) return;
 			$scope.search.results.movies = data;
 		});

@@ -1,5 +1,6 @@
 ﻿var racer = require('racer');
 var express = require('express');
+var config = require('./config');
 var entryManagment = require('./server/entry-managment');
 
 var app = express();
@@ -23,6 +24,11 @@ var serverModel = store.createModel();
 serverModel.subscribe('entries', function (err) { });
 serverModel.on('insert', '$queries.["entries",{},null].ids', function (idx, id) {
 	entryManagment.refreshMetadata(serverModel, id);
+});
+
+app.get('/config.js', function (req, res) {
+	res.type('js');
+	res.send('var Config = ' + JSON.stringify({ Trakt: config.trakt }));
 });
 
 app.get('/methods/files/list', function (req, res) {
