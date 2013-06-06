@@ -84,9 +84,7 @@ function SearchCtrl($scope, $http, $location, model) {
 			title: entry.title,
 			paths: [],
 			metadataProvider: entry.metadataProvider,
-			metadataId: entry.metadataId,
-			seasons: [],
-			episodes: []
+			metadataId: entry.metadataId
 		}, function (err) {
 			if (err) {
 				console.error(err);
