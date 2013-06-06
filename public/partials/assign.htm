@@ -10,17 +10,20 @@
         <tr>
             <th>Foldername</th>
             <th>Beautified Name</th>
-            <th>Categories</th>
+            <th>Metadata</th>
         </tr>
     </thead>
 
     <tbody>
         <tr data-ng-repeat="file in files | filter: filterExisting | orderBy: ['path']">
-            <td><a class="clickable" data-ng-click="navigate(file)">{{file.folder}}</a></td>
             <td>
-                <input type="text" data-ng-model="file.name"></td>
+                <a class="clickable" data-ng-click="navigate(file)" data-ng-show="file.isDir">{{file.name}}</a>
+                <span data-ng-hide="file.isDir">{{file.name}}</span>
+            </td>
             <td>
-                <div class="btn-group" data-ng-class="{open: file.open}">
+                <input type="text" data-ng-model="file.beautified" data-ng-show="file.isDir"></td>
+            <td>
+                <div class="btn-group" data-ng-class="{open: file.open}" data-ng-show="file.isDir">
                     <input class="btn" value="{{(file.categories | transform: 'name').join(', ')}}">
                     <button class="btn dropdown-toggle" data-ng-click="file.open=!file.open;search(file)">
                         <span class="caret"></span>

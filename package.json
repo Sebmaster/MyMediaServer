@@ -7,7 +7,9 @@
 		"livedb-mongo": "x",
 		"racer-browserchannel": "x",
 		"request": "x",
-		"underscore": "x"
+		"underscore": "x",
+		"walk": "x",
+		"q": "x"
 	},
 	"scripts": {
 		"start": "node server.js"

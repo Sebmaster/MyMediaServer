@@ -9,7 +9,7 @@ angular.module('MyMediaServer', ['racer.js', 'ngSanitize']).
 			when('/entries', { templateUrl: '/partials/entry/list.htm', controller: EntryListCtrl, resolve: EntryListCtrl.resolve }).
 			when('/entries/:id', { templateUrl: '/partials/entry/details.htm', controller: EntryDetailCtrl, resolve: EntryDetailCtrl.resolve }).
 			when('/entries/:id/path', { templateUrl: '/partials/entry/path.htm', controller: EntryPathCtrl, resolve: EntryPathCtrl.resolve }).
-			otherwise({redirectTo: '/'});
+			otherwise({ redirectTo: '/' });
 	}]).
 	filter('transform', ['$parse', function ($parse) {
 		return function (array, property) {
@@ -149,31 +149,35 @@ SearchCtrl.resolve.model.$inject = ['racer'];
 
 SearchCtrl.$inject = ['$scope', '$http', 'model'];
 
-function AssignCtrl($scope, $http, $route, model) {
+function AssignCtrl($scope, $http, $location, model) {
 	var entries = model.get('entries');
 
-	function refreshFiles() {
-		if ($scope.path[$scope.path.length - 1] === '/') {
-			$scope.path = $scope.path.substr(0, $scope.path.length - 1);
-		}
-		var path = $scope.path;
-
-		$http.get('/api/files/list').success(function (files) {
-			if (path != $scope.path) return;
-
-			$scope.files = [];
-			for (var i = 0; i < files.length; ++i) {
-				$scope.files[$scope.files.length] = {
-					path: $scope.path + '/' + files[i],
-					folder: files[i],
-					name: files[i].replace(/\.|_/g, ' ').replace(/ {2}/g, ' ').replace(/\d+p|\d+x\d+|\[.*?\]/g, '').replace(/\(\s+\)/g, ''),
-					open: false
-				};
-			}
-		});
+	$scope.path = $location.search().path;
+	if (!$scope.path) {
+		$scope.path = '';
 	}
 
-	$scope.$watch('path', refreshFiles);
+	$scope.$watch('path', function () {
+		var path = $scope.path;
+
+		$http.get('/api/files/list?path=' + encodeURIComponent(path)).success(function (files) {
+			if (path != $scope.path) return;
+
+			$scope.files = _.map(files, function (file) {
+				var beautified = file.name;
+				if (!file.isDir) {
+					beautified = beautified.replace(/\.|_/g, ' ').replace(/\d+p|\d+x\d+|\[.*?\]|FLAC|Blu-?Ray|\w264/ig, '').replace(/(\(|\[)\s+(\)|\])/g, '').replace(/\s{2,}/g, ' ');
+				}
+				return {
+					path: $scope.path + '/' + file.name,
+					name: file.name,
+					isDir: file.isDir,
+					beautified: beautified,
+					open: false
+				};
+			});
+		});
+	});
 
 	$scope.filterExisting = function (x) {
 		for (var i = 0; i < entries.length; ++i) {
@@ -187,11 +191,10 @@ function AssignCtrl($scope, $http, $route, model) {
 
 	$scope.navigate = function (file) {
 		$scope.path = file.path;
+		$location.search('path', file.path);
 	};
 
 	//TODO: Add show to library
-
-	$scope.path = '';
 }
 
 AssignCtrl.resolve = {
@@ -201,7 +204,7 @@ AssignCtrl.resolve = {
 };
 AssignCtrl.resolve.model.$inject = ['racer'];
 
-AssignCtrl.$inject = ['$scope', '$http', '$route', 'model'];
+AssignCtrl.$inject = ['$scope', '$http', '$location', 'model'];
 
 function EntryListCtrl($scope, $routeParams, model, $location, $root) {
 	$scope.entries = model.get('entries');
