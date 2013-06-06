@@ -30,7 +30,7 @@ module.exports = function (model) {
 							return {
 								name: file,
 								isDir: stat.isDirectory()
-							}
+							};
 						});
 					})).then(function (files) {
 						res.json(files);
