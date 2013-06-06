@@ -158,7 +158,7 @@ function AssignCtrl($scope, $http, $route, model) {
 		}
 		var path = $scope.path;
 
-		$http.get('/methods/files/list').success(function (files) {
+		$http.get('/api/files/list').success(function (files) {
 			if (path != $scope.path) return;
 
 			$scope.files = [];
@@ -227,7 +227,7 @@ function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 	$scope.$watch('entry.id', function () {
 		if (!$scope.entry.id) return;
 
-		$http.get('/methods/entries/refreshMetadata?id=' + $scope.entry.id);
+		$http.post('/api/entries/refreshMetadata?id=' + $scope.entry.id);
 	});
 
 	$root.title(function () {
@@ -281,7 +281,7 @@ function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 			$scope.entry.metadataId = trakt.tvdb_id;
 			$scope.entry.save();
 
-			$http.get('/methods/entries/refreshMetadata?id=' + $scope.entry.id);
+			$http.post('/api/entries/refreshMetadata?id=' + $scope.entry.id);
 		}
 	};
 
@@ -291,7 +291,7 @@ function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 			$scope.entry.metadataId = trakt.tvdb_id;
 			$scope.entry.save();
 
-			$http.get('/methods/entries/refreshMetadata?id=' + $scope.entry.id);
+			$http.post('/api/entries/refreshMetadata?id=' + $scope.entry.id);
 		}
 	};
 
@@ -309,7 +309,7 @@ function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 			});
 			$scope.entry.save();
 
-			$http.get('/methods/entries/refreshMetadata?id=' + $scope.entry.id);
+			$http.post('/api/entries/refreshMetadata?id=' + $scope.entry.id);
 		}
 	};*/
 }
