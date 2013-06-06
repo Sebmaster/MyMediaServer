@@ -44,7 +44,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr data-ng-repeat="episode in entry.episodes | filter: { season: season.season + '' }">
+                            <tr data-ng-repeat="episode in season.episodes">
                                 <td>{{episode.episode}}</td>
                                 <td>{{episode.title}}</td>
                             </tr>

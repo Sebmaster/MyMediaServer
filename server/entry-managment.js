@@ -13,7 +13,6 @@ function processTraktRequest(entry, data) {
 	entry.genres = data.genres;
 
 	entry.seasons = []; //TODO: Merge seasons
-	entry.episodes = [];
 	for (var i = 0; i < data.seasons.length; ++i) {
 		entry.seasons.push({
 			season: data.seasons[i].season,
@@ -21,18 +20,16 @@ function processTraktRequest(entry, data) {
 			providers: {
 				mal: null,
 				trakt: data.tvdb_id
-			}
+			},
+			episodes: _.map(data.seasons[i].episodes, function (episode) {
+				return {
+					episode: episode.episode,
+					title: episode.title,
+					synopsis: episode.overview,
+					image: episode.screen
+				};
+			})
 		});
-
-		entry.episodes = entry.episodes.concat(_.map(data.seasons[i].episodes, function (episode) {
-			return {
-				season: episode.season,
-				episode: episode.episode,
-				title: episode.title,
-				synopsis: episode.overview,
-				image: episode.screen
-			};
-		}));
 	}
 }
 
