@@ -80,7 +80,7 @@ exports.refreshMetadata = function (model, id) {
 				updateDb(model, entry);
 			});
 		} else if (entry.metadataProvider === 'trakt-movie') {
-			request('http://api.trakt.tv/show/summary.json/' + config.trakt.apiKey + '/' + entry.metadataId + '/true/', function (err, resp, data) {
+			request('http://api.trakt.tv/movie/summary.json/' + config.trakt.apiKey + '/' + entry.metadataId, function (err, resp, data) {
 				if (err) throw e;
 				data = JSON.parse(data);
 

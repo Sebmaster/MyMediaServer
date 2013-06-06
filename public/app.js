@@ -131,8 +131,8 @@ function SearchCtrl($scope, $http, model) {
 				return {
 					title: entry.title,
 					image: entry.images.poster,
-					metadataProvider: 'trakt',
-					metadataId: entry.tvdb_id,
+					metadataProvider: 'trakt-movie',
+					metadataId: entry.imdb_id,
 					type: 'Movie'
 				};
 			});
