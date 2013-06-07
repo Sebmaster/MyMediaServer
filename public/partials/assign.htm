@@ -17,7 +17,7 @@
                 <input type="text" data-ng-model="file.beautified" data-ng-show="file.isDir"></td>
             <td>
                 <div class="input-append btn-group" data-ng-class="{open: file.open}" data-ng-show="file.isDir">
-                    <input type="search" data-ng-model="file.search" placeholder="{{(entries | arrayContains:file.path:'paths' | transform: 'title').join(', ')}}">
+                    <input type="search" data-ng-model="file.search" placeholder="{{(entries | toArray | arrayContains:file.path:'paths' | transform: 'title').join(', ')}}">
                     <button class="btn dropdown-toggle" data-ng-click="file.open=!file.open">
                         <span class="caret"></span>
                     </button>
