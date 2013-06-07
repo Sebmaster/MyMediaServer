@@ -194,8 +194,6 @@ function AssignCtrl($scope, $http, $location, model) {
 			model.remove('entries.' + entry.id + '.paths', idx);
 		}
 	};
-
-	//TODO: Add show to library
 }
 
 AssignCtrl.resolve = {
