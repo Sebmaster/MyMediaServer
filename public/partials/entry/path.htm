@@ -1,6 +1,8 @@
 ﻿<h3>{{entry.title}}</h3>
 <form class="form-inline">
-    <input type="text" data-ng-model="assignRegex" placeholder="Episoderegex">
+    <select data-ng-model="assignRegex">
+        <option data-ng-repeat="(regex, desc) in availableRegexes" value="{{regex}}" data-ng-selected="assignRegex == regex">{{desc}}</option>
+    </select>
     <button class="btn" data-ng-click="autoAssign()">Auto Assign</button>
     <button class="btn" data-ng-click="applyEpisodes()">Apply</button>
 </form>
@@ -18,7 +20,9 @@
         <tr data-ng-repeat="file in files | orderBy: 'file'">
             <td>{{file.file}}</td>
             <td>
-                <select class="input-large" data-ng-model="file.season" data-ng-options="season.season for season in entry.seasons"></select>
+                <select class="input-large" data-ng-model="file.season" data-ng-options="season.season for season in entry.seasons">
+                    <option value=""></option>
+                </select>
             </td>
             <td>
                 <input class="input-mini" type="number" min="1" step="1" data-ng-model="file.episode"></td>

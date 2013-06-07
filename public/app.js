@@ -167,16 +167,10 @@ function AssignCtrl($scope, $http, $location, model) {
 
 	$http.get('/api/files/list?path=' + encodeURIComponent(path)).success(function (files) {
 		$scope.files = _.map(files, function (file) {
-			var beautified = file.name;
-			if (!file.isDir) {
-				beautified = beautified.replace(/\.|_/g, ' ').replace(/\d+p|\d+x\d+|\[.*?\]|FLAC|Blu-?Ray|\w264/ig, '').replace(/(\(|\[)\s+(\)|\])/g, '').replace(/\s{2,}/g, ' ');
-			}
-
 			return {
 				path: path + file.name,
 				name: file.name,
 				isDir: file.isDir,
-				beautified: beautified,
 				open: false
 			};
 		});
@@ -326,7 +320,11 @@ EntryDetailCtrl.resolve.model.$inject = ['racer'];
 EntryDetailCtrl.$inject = ['$scope', '$routeParams', 'model', '$http', '$rootScope'];
 
 function EntryPathCtrl($scope, $routeParams, model, $http, $root) {
-	$scope.assignRegex = '';
+	$scope.availableRegexes = {
+		'S?((\\d+)(e|x))(\\d+)': 'Season (opt.) + Episode',
+		'()()()(\\d+)': 'Episode-Only'
+	};
+	$scope.assignRegex = _.keys($scope.availableRegexes)[0];
 
 	$scope.entry = model.get('entries.' + $routeParams.id);
 
@@ -339,39 +337,63 @@ function EntryPathCtrl($scope, $routeParams, model, $http, $root) {
 
 		$scope.files = [];
 		for (var i = 0; i < $scope.entry.paths.length; ++i) {
-			$http.get('/api/files/listRecursive?path=' + encodeURIComponent($scope.entry.paths[i])).success(function (files) {
+			$http.get('/api/files/listRecursive?path=' + encodeURIComponent($scope.entry.paths[i])).success(function (path, files) {
 				$scope.files = $scope.files.concat(_.map(files, function (file) {
+					var found = null;
+					for (var i = 0; i < $scope.entry.seasons.length && !found; ++i) {
+						for (var j = 0; j < $scope.entry.seasons[i].episodes.length; ++j) {
+							if ($scope.entry.seasons[i].episodes[j].path === path + '/' + file) {
+								found = { season: $scope.entry.seasons[i], episode: j + 1 };
+								break;
+							}
+						}
+					}
+
 					return {
 						file: file,
-						season: null,
-						episode: null
+						path: path + '/' + file,
+						beautified: file.replace(/\.|_/g, ' ').replace(/\d+p|\d+x\d+|\[.*?\]|FLAC|Blu-?Ray|\w264/ig, '').replace(/(\(|\[)\s+(\)|\])/g, '').replace(/\s{2,}/g, ' '),
+						season: found ? found.season : null,
+						episode: found ? found.episode : null
 					};
 				})).sort();
-			});
+			}.bind(undefined, $scope.entry.paths[i]));
 		}
 	}, true);
 
 	$scope.autoAssign = function () {
 		if ($scope.entry.seasons.length === 0) return;
 
-		var regexes = $scope.assignRegex ? [new RegExp($scope.assignRegex, 'i')] : [/S?((\d+)(e|x))(\d+)/i, /()()()(\d+)/i];
+		var regex = new RegExp($scope.assignRegex, 'i');
 
 		for (var i = 0; i < $scope.files.length; ++i) {
 			var file = $scope.files[i];
 
-			for (var j = 0; j < regexes.length; ++j) {
-				var match = file.beautified.match(regexes[j]);
-				if (!match) continue;
+			var match = file.beautified.match(regex);
+			if (!match) continue;
 
-				if (!match[2]) {
-					match[2] = 1; // if no season is found, assume first
-				} else {
-					match[2] = parseInt(match[2], 10);
+			if (!match[2]) {
+				match[2] = null; // if no season is found, assume none
+			} else {
+				match[2] = parseInt(match[2], 10);
+			}
+
+			file.season = _.filter($scope.entry.seasons, function (season) { return season.season == match[2]; })[0];
+			file.episode = parseInt(match[4], 10);
+		}
+	};
+
+	$scope.applyEpisodes = function () {
+		for (var i = 0; i < $scope.files.length; ++i) {
+			var file = $scope.files[i];
+			if (file.season && file.episode) {
+				var j = 0;
+				for (; j < $scope.entry.seasons.length; ++j) {
+					if ($scope.entry.seasons[j].season === file.season.season) {
+						break;
+					}
 				}
-
-				file.season = _.filter($scope.entry.seasons, function (season) { return season.season == match[2]; })[0];
-				file.episode = parseInt(match[4], 10);
-				break;
+				model.set('entries.' + $scope.entry.id + '.seasons.' + j + '.episodes.' + (file.episode - 1) + '.path', file.path);
 			}
 		}
 	};
