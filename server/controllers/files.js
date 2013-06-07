@@ -48,7 +48,13 @@ module.exports = function (model) {
 				var files = [];
 				var walker = walk.walk(targetDir);
 				walker.on('file', function (root, stat, next) {
-					files[files.length] = root + '/' + stat.name;
+					root = root.substring(targetDir.length);
+					if (root[0] === '/') {
+						root = root.substring(1);
+						root = root + '/';
+					}
+
+					files[files.length] = root + stat.name;
 					next();
 				});
 
