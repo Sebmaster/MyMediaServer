@@ -1,4 +1,13 @@
 ﻿<h3>{{entry.title}}</h3>
+<h4>Paths</h4>
+<ul>
+    <li data-ng-repeat="path in entry.paths">{{path}}</li>
+</ul>
+<form class="form-inline">
+    <input type="text" data-ng-model="path" placeholder="Path">
+    <button class="btn" data-ng-click="addPath()">Add</button>
+</form>
+
 <form class="form-inline">
     <input type="text" data-ng-model="assignRegex" placeholder="Episoderegex">
     <button class="btn" data-ng-click="autoAssign()">Auto Assign</button>
@@ -15,10 +24,9 @@
     </thead>
 
     <tbody>
-        <tr data-ng-repeat="file in files | orderBy: ['path']">
-            <td>{{file.path}}</td>
+        <tr data-ng-repeat="file in files | orderBy: 'file'">
+            <td>{{file.file}}</td>
             <td>
-
                 <select class="input-large" data-ng-model="file.season" data-ng-options="season.season for season in entry.seasons"></select>
             </td>
             <td>

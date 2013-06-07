@@ -329,12 +329,34 @@ EntryDetailCtrl.$inject = ['$scope', '$routeParams', 'model', '$http', '$rootSco
 
 function EntryPathCtrl($scope, $routeParams, model, $http, $root) {
 	$scope.assignRegex = '';
+	$scope.path = '';
 
 	$scope.entry = model.get('entries.' + $routeParams.id);
 
 	$root.title(function () {
-		return 'Path - ' + $scope.entry.title;
+		return 'Paths - ' + $scope.entry.title;
 	});
+
+	$scope.$watch('entry.paths', function () {
+		if (!$scope.entry.id) return;
+
+		$scope.files = [];
+		for (var i=0; i < $scope.entry.paths.length; ++i) {
+			$http.get('/api/files/listRecursive?path=' + encodeURIComponent($scope.entry.paths[i])).success(function (files) {
+				$scope.files = $scope.files.concat(_.map(files, function(file) {
+					return {
+						file: file,
+						season: null,
+						episode: null
+					};
+				})).sort();
+			});
+		}
+	}, true);
+
+	$scope.addPath = function () {
+		model.push('entries.' + $routeParams.id + '.paths', $scope.path);
+	};
 
 	$scope.autoAssign = function () {
 		if ($scope.entry.seasons.length === 0) return;
