@@ -34,13 +34,22 @@ angular.module('MyMediaServer', ['racer.js', 'ngSanitize']).
 			return ret;
 		};
 	}]).
-	filter('join', ['$parse', function ($parse) {
-		return function (array, joiner) {
+	filter('toArray', ['$parse', function ($parse) {
+		return function (array) {
+			return _.values(array);
+		};
+	}]).
+	filter('arrayContains', ['$parse', function ($parse) {
+		return function (array, needle, prop) {
 			if (!angular.isArray(array)) return array;
+
 			var ret = [];
 			for (var i = 0; i < array.length; ++i) {
-				ret[i] = joiner[array[i]];
+				if (array[i][prop].indexOf(needle) !== -1) {
+					ret[ret.length] = array[i];
+				}
 			}
+
 			return ret;
 		};
 	}]).
@@ -151,7 +160,7 @@ SearchCtrl.resolve.model.$inject = ['racer'];
 SearchCtrl.$inject = ['$scope', '$http', '$location', 'model'];
 
 function AssignCtrl($scope, $http, $location, model) {
-	var entries = model.get('entries');
+	$scope.entries = model.get('entries');
 
 	var path = $location.search().path;
 	if (!path) path = '';
@@ -162,8 +171,9 @@ function AssignCtrl($scope, $http, $location, model) {
 			if (!file.isDir) {
 				beautified = beautified.replace(/\.|_/g, ' ').replace(/\d+p|\d+x\d+|\[.*?\]|FLAC|Blu-?Ray|\w264/ig, '').replace(/(\(|\[)\s+(\)|\])/g, '').replace(/\s{2,}/g, ' ');
 			}
+
 			return {
-				path: path + '/' + file.name,
+				path: path + file.name,
 				name: file.name,
 				isDir: file.isDir,
 				beautified: beautified,
@@ -172,18 +182,12 @@ function AssignCtrl($scope, $http, $location, model) {
 		});
 	});
 
-	$scope.filterExisting = function (x) {
-		for (var i = 0; i < entries.length; ++i) {
-			if (entries[i].path === x.path) {
-				return false;
-			}
-		}
-
-		return true;
+	$scope.navigate = function (file) {
+		$location.search('path', file.path + '/');
 	};
 
-	$scope.navigate = function (file) {
-		$location.search('path', file.path);
+	$scope.toggleEntry = function (file, entry) {
+		model.push('entries.' + entry.id + '.paths', file.path);
 	};
 
 	//TODO: Add show to library
