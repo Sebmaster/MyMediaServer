@@ -229,6 +229,17 @@ function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 	$root.title(function () {
 		return $scope.entry.title;
 	});
+
+	$scope.play = function (episode) {
+		var wrapper = jQuery('<div>');
+		var src = jQuery('<source>').prop('src', '/stream/' + episode.path).one('error', function (e) {
+			var vlc = jQuery('<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" version="VideoLAN.VLCPlugin.2" width="100%" height="100%">');
+			wrapper.empty().append(vlc);
+			vlc[0].playlist.add(window.location.origin + '/stream/' + encodeURI(episode.path), episode.title, '');
+			vlc[0].playlist.play();
+		}).wrap('<video autoplay controls width="100%" height="100%">').parent().appendTo(wrapper);
+		wrapper.css({ position: 'absolute', top: '5%', left: '5%', width: '90%', height: '90%' }).appendTo('body');
+	};
 	/*
 	$scope.$watch('entry.title', function () {
 		$scope.search.query = $scope.entry.title;

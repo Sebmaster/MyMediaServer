@@ -28,6 +28,8 @@ app.get('/', function (req, res) {
 	res.sendfile(__dirname + '/public/index.htm');
 });
 
+app.use('/stream', express.static(config.mediaPath));
+
 app.get('/config.js', function (req, res) {
 	res.type('js');
 	res.send('var Config = ' + JSON.stringify({ Trakt: config.trakt }));
