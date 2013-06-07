@@ -1,13 +1,4 @@
 ﻿<h3>{{entry.title}}</h3>
-<h4>Paths</h4>
-<ul>
-    <li data-ng-repeat="path in entry.paths">{{path}}</li>
-</ul>
-<form class="form-inline">
-    <input type="text" data-ng-model="path" placeholder="Path">
-    <button class="btn" data-ng-click="addPath()">Add</button>
-</form>
-
 <form class="form-inline">
     <input type="text" data-ng-model="assignRegex" placeholder="Episoderegex">
     <button class="btn" data-ng-click="autoAssign()">Auto Assign</button>

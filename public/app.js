@@ -327,7 +327,6 @@ EntryDetailCtrl.$inject = ['$scope', '$routeParams', 'model', '$http', '$rootSco
 
 function EntryPathCtrl($scope, $routeParams, model, $http, $root) {
 	$scope.assignRegex = '';
-	$scope.path = '';
 
 	$scope.entry = model.get('entries.' + $routeParams.id);
 
@@ -351,10 +350,6 @@ function EntryPathCtrl($scope, $routeParams, model, $http, $root) {
 			});
 		}
 	}, true);
-
-	$scope.addPath = function () {
-		model.push('entries.' + $routeParams.id + '.paths', $scope.path);
-	};
 
 	$scope.autoAssign = function () {
 		if ($scope.entry.seasons.length === 0) return;
