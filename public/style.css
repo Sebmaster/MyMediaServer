@@ -2,7 +2,7 @@ img.small-cover {
     max-width: 50px;
 }
 
-.clickable {
+.clickable, a[data-ng-click] {
     cursor: pointer;
 }
 
