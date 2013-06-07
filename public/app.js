@@ -153,30 +153,22 @@ SearchCtrl.$inject = ['$scope', '$http', '$location', 'model'];
 function AssignCtrl($scope, $http, $location, model) {
 	var entries = model.get('entries');
 
-	$scope.path = $location.search().path;
-	if (!$scope.path) {
-		$scope.path = '';
-	}
+	var path = $location.search().path;
+	if (!path) path = '';
 
-	$scope.$watch('path', function () {
-		var path = $scope.path;
-
-		$http.get('/api/files/list?path=' + encodeURIComponent(path)).success(function (files) {
-			if (path != $scope.path) return;
-
-			$scope.files = _.map(files, function (file) {
-				var beautified = file.name;
-				if (!file.isDir) {
-					beautified = beautified.replace(/\.|_/g, ' ').replace(/\d+p|\d+x\d+|\[.*?\]|FLAC|Blu-?Ray|\w264/ig, '').replace(/(\(|\[)\s+(\)|\])/g, '').replace(/\s{2,}/g, ' ');
-				}
-				return {
-					path: $scope.path + '/' + file.name,
-					name: file.name,
-					isDir: file.isDir,
-					beautified: beautified,
-					open: false
-				};
-			});
+	$http.get('/api/files/list?path=' + encodeURIComponent(path)).success(function (files) {
+		$scope.files = _.map(files, function (file) {
+			var beautified = file.name;
+			if (!file.isDir) {
+				beautified = beautified.replace(/\.|_/g, ' ').replace(/\d+p|\d+x\d+|\[.*?\]|FLAC|Blu-?Ray|\w264/ig, '').replace(/(\(|\[)\s+(\)|\])/g, '').replace(/\s{2,}/g, ' ');
+			}
+			return {
+				path: path + '/' + file.name,
+				name: file.name,
+				isDir: file.isDir,
+				beautified: beautified,
+				open: false
+			};
 		});
 	});
 
@@ -191,7 +183,6 @@ function AssignCtrl($scope, $http, $location, model) {
 	};
 
 	$scope.navigate = function (file) {
-		$scope.path = file.path;
 		$location.search('path', file.path);
 	};
 
@@ -341,9 +332,9 @@ function EntryPathCtrl($scope, $routeParams, model, $http, $root) {
 		if (!$scope.entry.id) return;
 
 		$scope.files = [];
-		for (var i=0; i < $scope.entry.paths.length; ++i) {
+		for (var i = 0; i < $scope.entry.paths.length; ++i) {
 			$http.get('/api/files/listRecursive?path=' + encodeURIComponent($scope.entry.paths[i])).success(function (files) {
-				$scope.files = $scope.files.concat(_.map(files, function(file) {
+				$scope.files = $scope.files.concat(_.map(files, function (file) {
 					return {
 						file: file,
 						season: null,
