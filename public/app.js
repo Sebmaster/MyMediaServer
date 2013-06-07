@@ -187,7 +187,12 @@ function AssignCtrl($scope, $http, $location, model) {
 	};
 
 	$scope.toggleEntry = function (file, entry) {
-		model.push('entries.' + entry.id + '.paths', file.path);
+		var idx = entry.paths.indexOf(file.path);
+		if (idx === -1) {
+			model.push('entries.' + entry.id + '.paths', file.path);
+		} else {
+			model.remove('entries.' + entry.id + '.paths', idx);
+		}
 	};
 
 	//TODO: Add show to library
