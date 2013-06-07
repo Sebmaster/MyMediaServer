@@ -235,11 +235,11 @@ function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 			var vlc = jQuery('<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" version="VideoLAN.VLCPlugin.2" width="100%" height="100%">');
 			wrapper.empty().append(vlc);
 			if (vlc[0].VersionInfo) {
-				vlc[0].playlist.add(window.location.origin + '/stream/' + encodeURI(episode.path), episode.title, '');
+				vlc[0].playlist.add('/stream/' + encodeURI(episode.path), episode.title, '');
 				vlc[0].playlist.play();
 			} else {
 				wrapper.remove();
-				window.location.href = window.location.origin + '/stream/' + encodeURI(episode.path);
+				window.location.href = '/stream/' + encodeURI(episode.path);
 			}
 		}
 
