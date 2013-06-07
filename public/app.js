@@ -4,7 +4,7 @@ angular.module('MyMediaServer', ['racer.js', 'ngSanitize']).
 
 		$routeProvider.
 			when('/', { templateUrl: '/partials/home.htm', controller: IndexCtrl, resolve: IndexCtrl.resolve }).
-			when('/search', { templateUrl: '/partials/search.htm', controller: SearchCtrl, resolve: SearchCtrl.resolve }).
+			when('/search', { templateUrl: '/partials/search.htm', controller: SearchCtrl, resolve: SearchCtrl.resolve, reloadOnSearch: false }).
 			when('/assign', { templateUrl: '/partials/assign.htm', controller: AssignCtrl, resolve: AssignCtrl.resolve }).
 			when('/entries', { templateUrl: '/partials/entry/list.htm', controller: EntryListCtrl, resolve: EntryListCtrl.resolve }).
 			when('/entries/:id', { templateUrl: '/partials/entry/details.htm', controller: EntryDetailCtrl, resolve: EntryDetailCtrl.resolve }).
