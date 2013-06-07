@@ -39,14 +39,16 @@
                     <table class="table table-condensed">
                         <thead>
                             <tr>
+                                <th></th>
                                 <th>Number</th>
                                 <th>Name</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="episode in season.episodes">
-                                <td>{{episode.episode}}</td>
-                                <td>{{episode.title}}</td>
+                                <td><button data-ng-show="episode.path" class="btn"><span class="icon-play"></span></button></td>
+                                <td style="vertical-align: middle">{{episode.episode}}</td>
+                                <td style="vertical-align: middle">{{episode.title}}</td>
                             </tr>
                         </tbody>
                     </table>
