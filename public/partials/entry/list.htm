@@ -11,7 +11,7 @@
 		<tr class="clickable" data-ng-repeat="entry in entries | orderBy: 'title'" data-ng-click="chooseEntry(entry)">
 			<td><div><img class="thumbnail small-cover" data-ng-src="{{entry.image}}"></div></td>
 			<td>{{entry.title}}</td>
-            <td>{{entry.watched || 0}} / {{entry.episodes.length || '?'}}</td>
+            <td>{{entry.watched || 0}} / {{(entry.seasons | transform:'episodes' | flatten).length || '?'}}</td>
 		</tr>
 	</tbody>
 </table>

@@ -15,7 +15,7 @@
 
         <dl>
             <dt>Watched</dt>
-            <dd>{{entry.watched || 0}} / {{entry.episodes.length || '?'}}</dd>
+            <dd>{{entry.watched || 0}} / {{(entry.seasons | transform:'episodes' | flatten).length || '?'}}</dd>
             <dt>Genres</dt>
             <dd>{{entry.genres.join(', ')}}</dd>
         </dl>
