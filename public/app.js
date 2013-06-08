@@ -244,12 +244,12 @@ function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 		}
 
 		var wrapper = jQuery('<div>').css({ position: 'fixed', top: '5%', left: '5%', width: '90%', height: '90%' }).appendTo('body');
+		var vid = jQuery('<video autoplay controls width="100%" height="100%">')
+			.appendTo(wrapper);
+
 		jQuery('<source>')
 			.prop('src', '/stream/' + episode.path)
-			.one('error', fallback)
-			.wrap('<video autoplay controls width="100%" height="100%">').parent()
-				.one('error', fallback)
-				.appendTo(wrapper);
+			.appendTo(vid);
 	};
 	/*
 	$scope.$watch('entry.title', function () {

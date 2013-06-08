@@ -9,7 +9,8 @@
 		"request": "x",
 		"underscore": "x",
 		"walk": "x",
-		"q": "x"
+		"q": "x",
+		"mime": "x"
 	},
 	"scripts": {
 		"start": "node server.js"
