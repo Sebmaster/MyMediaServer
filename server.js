@@ -31,15 +31,14 @@ app.get('/', function (req, res) {
 	res.sendfile(__dirname + '/public/index.htm');
 });
 
-app.use('/stream', express.static(config.mediaPath));
-
 app.get('/config.js', function (req, res) {
 	res.type('js');
 	res.send('var Config = ' + JSON.stringify({ Trakt: config.trakt }));
 });
 
-utils.registerController(app, 'files', require('./server/controllers/files')(serverModel));
-utils.registerController(app, 'entries', require('./server/controllers/entries')(serverModel));
+utils.registerController(app, '/stream', require('./server/controllers/stream')());
+utils.registerController(app, '/api/files', require('./server/controllers/files')(serverModel));
+utils.registerController(app, '/api/entries', require('./server/controllers/entries')(serverModel));
 
 app.get('/model', function (req, res) {
 	var model = store.createModel();
