@@ -235,7 +235,7 @@ function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 			var vlc = jQuery('<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" version="VideoLAN.VLCPlugin.2" width="100%" height="100%">');
 			wrapper.empty().append(vlc);
 			if (vlc[0].VersionInfo) {
-				vlc[0].playlist.add('/stream/' + encodeURI(episode.path), episode.title, '');
+				vlc[0].playlist.add('/stream/' + encodeURI(episode.path)+ '/webm/', episode.title, '');
 				vlc[0].playlist.play();
 			} else {
 				wrapper.remove();
@@ -245,11 +245,19 @@ function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 
 		var wrapper = jQuery('<div>').css({ position: 'fixed', top: '5%', left: '5%', width: '90%', height: '90%' }).appendTo('body');
 		var vid = jQuery('<video autoplay controls width="100%" height="100%">')
+			.one('error', fallback)
 			.appendTo(wrapper);
 
 		jQuery('<source>')
-			.prop('src', '/stream/' + episode.path)
+			.prop('src', '/stream/' + episode.path + '/webm/')
+			.prop('type', 'video/webm')
 			.appendTo(vid);
+
+		jQuery('<source>')
+			.prop('src', '/stream/' + episode.path + '/hls/playlist.m3u8')
+			.prop('type', 'application/vnd.apple.mpegurl')
+			.appendTo(vid)
+			.one('error', fallback);
 	};
 	/*
 	$scope.$watch('entry.title', function () {

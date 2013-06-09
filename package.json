@@ -10,7 +10,8 @@
 		"underscore": "x",
 		"walk": "x",
 		"q": "x",
-		"mime": "x"
+		"temp": "x",
+		"rimraf": "x"
 	},
 	"scripts": {
 		"start": "node server.js"
