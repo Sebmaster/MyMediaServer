@@ -77,6 +77,8 @@ module.exports = function () {
 				codec = 'webm';
 			} else if ((idx = uri.lastIndexOf('/hls/')) !== -1) {
 				codec = 'hls';
+			} else if ((idx = uri.lastIndexOf('/flv/')) !== -1) {
+				codec = 'flv';
 			}
 
 			if (codec) {
@@ -97,6 +99,21 @@ module.exports = function () {
 					'Content-Type': 'video/webm'
 				});
 				ffmpeg.stdout.pipe(res);
+			} else if (codec === 'flv') {
+				var options = ['-i', target, '-f', 'flv', '-vf', 'scale=min(' + targetWidth + '\\, iw):-1', '-ar', 44100, 'pipe:1'];
+				options.splice.apply(options, [options.length - 1, 0].concat(config.transcodeParameters.misc));
+
+				var ffmpeg = spawn(__dirname + '/ffmpeg', options, { cwd: __dirname });
+
+				req.on('close', function () {
+					ffmpeg.kill();
+				});
+
+				res.writeHead(200, {
+					'Transfer-Encoding': 'chunked',
+					'Content-Type': 'video/x-flv'
+				});
+				ffmpeg.stdout.pipe(res);
 			} else if (codec === 'hls') {
 				if (runningEncodes[target]) {
 					deliverHLSPath(uri, runningEncodes[target], res);
@@ -111,7 +128,6 @@ module.exports = function () {
 
 						var ffmpeg = spawn(__dirname + '/ffmpeg', options, { cwd: tmpPath });
 						runningEncodes[target] = { lastAccess: Date.now(), tmpPath: tmpPath, ffmpeg: ffmpeg };
-						ffmpeg.stderr.on('data', function (data) { console.log(data.toString()) });
 
 						deliverHLSPath(uri, runningEncodes[target], res, 20);
 					});

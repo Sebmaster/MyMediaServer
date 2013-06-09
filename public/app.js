@@ -234,12 +234,23 @@ function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 		function fallback() {
 			var vlc = jQuery('<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" version="VideoLAN.VLCPlugin.2" width="100%" height="100%">');
 			wrapper.empty().append(vlc);
+
 			if (vlc[0].VersionInfo) {
-				vlc[0].playlist.add('/stream/' + encodeURI(episode.path)+ '/webm/?size=' + Math.max(window.screen.width, window.screen.height), episode.title, '');
+				vlc[0].playlist.add('/stream/' + encodeURI(episode.path) + '/webm/?size=' + Math.max(window.screen.width, window.screen.height), episode.title, '');
 				vlc[0].playlist.play();
 			} else {
-				wrapper.remove();
-				window.location.href = '/stream/' + encodeURI(episode.path);
+				var flash = jQuery('<div id="videoElem" style="background-color: grey"><script type="text/javascript" src="/jwplayer.js"></script><a href="/stream/' + encodeURI(episode.path) + '">Download here</a></div>');
+				wrapper.empty().append(flash);
+
+				if (jwplayer) {
+					jwplayer("videoElem").setup({
+						file: '/stream/' + episode.path + '/flv/test.flv?size=' + Math.max(window.screen.width, window.screen.height),
+						autostart: true,
+						width: '100%',
+						height: '100%',
+						fallback: false
+					});
+				}
 			}
 		}
 
@@ -247,12 +258,12 @@ function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 		var vid = jQuery('<video autoplay controls width="100%" height="100%">')
 			.one('error', fallback)
 			.appendTo(wrapper);
-
+		
 		jQuery('<source>')
 			.prop('src', '/stream/' + episode.path + '/webm/?size=' + Math.max(window.screen.width, window.screen.height))
 			.prop('type', 'video/webm')
 			.appendTo(vid);
-
+			
 		jQuery('<source>')
 			.prop('src', '/stream/' + episode.path + '/hls/playlist.m3u8?size=' + Math.max(window.screen.width, window.screen.height))
 			.prop('type', 'application/vnd.apple.mpegurl')
