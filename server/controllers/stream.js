@@ -12,12 +12,13 @@ function prepareOptionsWebM(target, targetWidth) {
 	return options;
 }
 
-var h264Options = ['-acodec', 'libvo_aacenc', '-ac', '2', '-vcodec', 'libx264', '-x264opts', 'level=3.1',
+var h264Options = ['-acodec', 'libvo_aacenc', '-ac', '2', '-map', 0, '-vcodec', 'libx264', '-x264opts', 'level=3.1',
 	'-profile:v', 'main', '-preset:v', 'fast', '-ar', 44100].concat(config.transcodeParameters.misc);
 
 function prepareOptionsHls(target, targetWidth) {
-	var options = ['-i', target, '-vf', 'scale=min(' + targetWidth + '\\, iw):-1',
-		'-async', 1, '-map', '0', '-f', 'segment', '-segment_time', '10', '-flags', '-global_header',
+	var options = ['-i', target,
+		'-async', 1, /*'-vf', 'scale=min(' + targetWidth + '\\, iw):-1',*/ '-ac', '2', //TODO: Need to check if height would be odd (impossible)
+		'-flags', '-global_header', '-f', 'segment', '-segment_time', '10',
 		'-segment_list', 'playlist.m3u8', '-segment_format', 'mpegts', '-segment_list_flags', 'live',
 		'HLS%05d.ts'];
 
@@ -51,7 +52,7 @@ function deliverHLSPath(reqPath, encode, res, retries) {
 	var idx = reqPath.lastIndexOf('/hls/');
 	fs.readFile(encode.tmpPath + '/' + reqPath.substring(idx + 5), function (err, data) {
 		var match;
-		if (err || (isPlaylist && (!(match = data.toString().match(/.ts/g)) || match.length < 4))) {
+		if (err || (isPlaylist && (!(match = data.toString().match(/.ts/g)) || match.length < 2))) {
 			if (retries) {
 				setTimeout(function () {
 					deliverHLSPath(reqPath, encode, res, retries - 1);
@@ -80,7 +81,7 @@ module.exports = function () {
 	var handler = express.static(config.mediaPath);
 	if (config.transcode) {
 		handler = function (req, res, next) {
-			var targetWidth = req.query.size;
+			var targetWidth = parseInt(req.query.size, 10) ? req.query.size : 1920;
 
 			var uri = decodeURI(req.path);
 			var splitted = uri.split('/');
@@ -127,7 +128,7 @@ module.exports = function () {
 				ffmpeg.stdout.pipe(res);
 			} else if (codec === 'hls') {
 				if (runningEncodes[target]) {
-					deliverHLSPath(uri, runningEncodes[target], res);
+					deliverHLSPath(uri, runningEncodes[target], res, 20);
 				} else {
 					temp.mkdir(null, function (err, tmpPath) {
 						if (err) {
