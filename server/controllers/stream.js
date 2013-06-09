@@ -68,7 +68,8 @@ module.exports = function () {
 	var handler = express.static(config.mediaPath);
 	if (config.transcode) {
 		handler = function (req, res, next) {
-			var targetWidth = 1920;
+			var targetWidth = req.query.size;
+
 			var uri = decodeURI(req.path);
 			var splitted = uri.split('/');
 			var idx, codec, target;

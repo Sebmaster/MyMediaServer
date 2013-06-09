@@ -235,7 +235,7 @@ function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 			var vlc = jQuery('<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" version="VideoLAN.VLCPlugin.2" width="100%" height="100%">');
 			wrapper.empty().append(vlc);
 			if (vlc[0].VersionInfo) {
-				vlc[0].playlist.add('/stream/' + encodeURI(episode.path)+ '/webm/', episode.title, '');
+				vlc[0].playlist.add('/stream/' + encodeURI(episode.path)+ '/webm/?size=' + Math.max(window.screen.width, window.screen.height), episode.title, '');
 				vlc[0].playlist.play();
 			} else {
 				wrapper.remove();
@@ -249,12 +249,12 @@ function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 			.appendTo(wrapper);
 
 		jQuery('<source>')
-			.prop('src', '/stream/' + episode.path + '/webm/')
+			.prop('src', '/stream/' + episode.path + '/webm/?size=' + Math.max(window.screen.width, window.screen.height))
 			.prop('type', 'video/webm')
 			.appendTo(vid);
 
 		jQuery('<source>')
-			.prop('src', '/stream/' + episode.path + '/hls/playlist.m3u8')
+			.prop('src', '/stream/' + episode.path + '/hls/playlist.m3u8?size=' + Math.max(window.screen.width, window.screen.height))
 			.prop('type', 'application/vnd.apple.mpegurl')
 			.appendTo(vid)
 			.one('error', fallback);
