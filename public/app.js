@@ -258,6 +258,17 @@ function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 			.prop('type', 'application/vnd.apple.mpegurl')
 			.appendTo(vid)
 			.one('error', fallback);
+
+		var fn = function (e) {
+			if (e.keyCode === 27 || (!e.keyCode && !wrapper.children().is(e.target))) {
+				wrapper.remove();
+				jQuery(document).off('keydown', fn).off('click', fn);
+			}
+		};
+
+		setTimeout(function () {
+			jQuery(document).on('keydown', fn).on('click', fn);
+		}, 0);
 	};
 	/*
 	$scope.$watch('entry.title', function () {
