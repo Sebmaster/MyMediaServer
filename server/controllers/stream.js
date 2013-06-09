@@ -100,7 +100,7 @@ module.exports = function () {
 				});
 				ffmpeg.stdout.pipe(res);
 			} else if (codec === 'flv') {
-				var options = ['-i', target, '-f', 'flv', '-vf', 'scale=min(' + targetWidth + '\\, iw):-1', '-ar', 44100, 'pipe:1'];
+				var options = ['-i', target, '-f', 'flv', '-vcodec', 'h264', '-vf', 'scale=min(' + targetWidth + '\\, iw):-1', '-ar', 44100, 'pipe:1'];
 				options.splice.apply(options, [options.length - 1, 0].concat(config.transcodeParameters.misc));
 
 				var ffmpeg = spawn(__dirname + '/ffmpeg', options, { cwd: __dirname });
