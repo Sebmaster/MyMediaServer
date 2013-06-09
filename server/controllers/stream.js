@@ -12,13 +12,25 @@ function prepareOptionsWebM(target, targetWidth) {
 	return options;
 }
 
+var h264Options = ['-acodec', 'libvo_aacenc', '-ac', '2', '-vcodec', 'libx264', '-x264opts', 'level=3.1',
+	'-profile:v', 'main', '-preset:v', 'fast', '-ar', 44100].concat(config.transcodeParameters.misc);
+
 function prepareOptionsHls(target, targetWidth) {
 	var options = ['-i', target, '-vf', 'scale=min(' + targetWidth + '\\, iw):-1',
-		'-async', 1, '-acodec', 'libvo_aacenc', '-ac', '2', '-vcodec', 'libx264', '-x264opts', 'level=3.1',
-		'-profile:v', 'main', '-preset:v', 'fast', '-flags', '-global_header', '-map', '0', '-f', 'segment',
-		'-segment_time', '10', '-segment_list', 'playlist.m3u8', '-segment_format', 'mpegts', '-segment_list_flags', 'live',
+		'-async', 1, '-map', '0', '-f', 'segment', '-segment_time', '10', '-flags', '-global_header',
+		'-segment_list', 'playlist.m3u8', '-segment_format', 'mpegts', '-segment_list_flags', 'live',
 		'HLS%05d.ts'];
 
+	options.splice.apply(options, [2, 0].concat(h264Options));
+	options.splice.apply(options, [options.length - 1, 0].concat(config.transcodeParameters.misc));
+	return options;
+}
+
+function prepareOptionsFlv(target, targetWidth) {
+	var options = ['-i', target, '-f', 'flv',
+		'-vf', 'scale=min(' + targetWidth + '\\, iw):-1', 'pipe:1'];
+
+	options.splice.apply(options, [2, 0].concat(h264Options));
 	options.splice.apply(options, [options.length - 1, 0].concat(config.transcodeParameters.misc));
 	return options;
 }
@@ -100,8 +112,7 @@ module.exports = function () {
 				});
 				ffmpeg.stdout.pipe(res);
 			} else if (codec === 'flv') {
-				var options = ['-i', target, '-f', 'flv', '-vcodec', 'h264', '-vf', 'scale=min(' + targetWidth + '\\, iw):-1', '-ar', 44100, 'pipe:1'];
-				options.splice.apply(options, [options.length - 1, 0].concat(config.transcodeParameters.misc));
+				var options = prepareOptionsFlv(target, targetWidth);
 
 				var ffmpeg = spawn(__dirname + '/ffmpeg', options, { cwd: __dirname });
 
