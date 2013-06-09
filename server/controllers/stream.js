@@ -17,7 +17,7 @@ var h264Options = ['-acodec', 'libvo_aacenc', '-ac', '2', '-map', 0, '-vcodec', 
 
 function prepareOptionsHls(target, targetWidth) {
 	var options = ['-i', target,
-		'-async', 1, /*'-vf', 'scale=min(' + targetWidth + '\\, iw):-1',*/ '-ac', '2', //TODO: Need to check if height would be odd (impossible)
+		'-async', 1, '-vf', 'scale=min(' + targetWidth + '\\, iw):trunc(ow/a/2)*2', '-ac', '2',
 		'-flags', '-global_header', '-f', 'segment', '-segment_time', '10',
 		'-segment_list', 'playlist.m3u8', '-segment_format', 'mpegts', '-segment_list_flags', 'live',
 		'HLS%05d.ts'];
