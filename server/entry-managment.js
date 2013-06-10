@@ -12,8 +12,12 @@ function processTraktRequest(entry, data) {
 	entry.synopsis = data.overview;
 	entry.genres = data.genres;
 
-	entry.seasons = []; //TODO: Merge seasons
+	if (!entry.seasons) {
+		entry.seasons = [];
+	}
 	for (var i = 0; i < data.seasons.length; ++i) {
+		if (_.find(entry.seasons, function (season) { return season.season === data.seasons[i].season; })) continue; // Don't overwrite existing seasons
+
 		entry.seasons.push({
 			season: data.seasons[i].season,
 			image: data.seasons[i].images.poster,
