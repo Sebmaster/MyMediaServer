@@ -2,7 +2,7 @@
 var walk = require('walk');
 var config = require('../../config');
 var path = require('path');
-var _ = require('underscore');
+var _ = require('lodash');
 var Q = require('q');
 
 function isAllowed(targetDir) {

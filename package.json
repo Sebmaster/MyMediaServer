@@ -7,7 +7,7 @@
 		"livedb-mongo": "x",
 		"racer-browserchannel": "x",
 		"request": "x",
-		"underscore": "x",
+		"lodash": "x",
 		"walk": "x",
 		"q": "x",
 		"temp": "x",

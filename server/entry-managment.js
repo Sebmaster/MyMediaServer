@@ -1,5 +1,5 @@
 ﻿var request = require('request');
-var _ = require('underscore');
+var _ = require('lodash');
 var config = require('../config.js');
 
 function updateDb(model, entry) {
@@ -16,13 +16,10 @@ function processTraktRequest(entry, data) {
 		entry.seasons = [];
 	}
 	for (var i = 0; i < data.seasons.length; ++i) {
-		if (_.find(entry.seasons, function (season) { return season.season === data.seasons[i].season; })) continue; // Don't overwrite existing seasons
-
-		entry.seasons.push({
+		var addSeason = {
 			season: data.seasons[i].season,
 			image: data.seasons[i].images.poster,
 			providers: {
-				mal: null,
 				trakt: data.tvdb_id
 			},
 			episodes: _.map(data.seasons[i].episodes, function (episode) {
@@ -33,7 +30,17 @@ function processTraktRequest(entry, data) {
 					image: episode.screen
 				};
 			})
-		});
+		};
+
+		var found = _.find(entry.seasons, function (season) { return season.season === data.seasons[i].season; });
+		if (found) {
+			if (found.providers.primary === 'trakt' && found.providers.trakt == data.tvdb_id) {
+				_.merge(found, addSeason);
+			}
+		} else {
+			addSeason.providers.primary = 'trakt';
+			entry.seasons.push(addSeason);
+		}
 	}
 }
 
