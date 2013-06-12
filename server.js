@@ -11,12 +11,14 @@ var store = racer.createStore({
 
 var serverModel = store.createModel();
 serverModel.subscribe('entries', function (err) { });
-serverModel.on('change', 'entries.*.metadataProvider', function (idx, id) {
+
+function refreshData(idx, id) {
+	console.log('refresh');
 	entryManagment.refreshMetadata(serverModel, id);
-});
-serverModel.on('change', 'entries.*.metadataId', function (idx, id) {
-	entryManagment.refreshMetadata(serverModel, id);
-});
+}
+serverModel.on('insert', '$queries.["entries",{},null].ids', refreshData);
+serverModel.on('change', 'entries.*.metadataProvider', refreshData);
+serverModel.on('change', 'entries.*.metadataId', refreshData);
 
 
 var app = express();
