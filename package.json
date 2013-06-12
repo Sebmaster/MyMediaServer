@@ -15,5 +15,8 @@
 	},
 	"scripts": {
 		"start": "node server.js"
+	},
+	"bin": {
+		"mymediaserver": "./bin/mymediaserver"
 	}
 }
