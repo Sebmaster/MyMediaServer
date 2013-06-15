@@ -13,7 +13,6 @@ var serverModel = store.createModel();
 serverModel.subscribe('entries', function (err) { });
 
 function refreshData(idx, id) {
-	console.log('refresh');
 	entryManagment.refreshMetadata(serverModel, id);
 }
 serverModel.on('insert', '$queries.["entries",{},null].ids', refreshData);
