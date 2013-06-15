@@ -17,25 +17,21 @@
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="row-fluid">
-            <nav class="span2">
-                <div class="nav-wrapper">
-                    <ul class="nav nav-list">
-                        <li class="nav-header"><a href="#/">Home</a></li>
-                    </ul>
-                    <ul class="nav nav-list">
-                        <li class="nav-header"><a href="#/entries/">My Library</a></li>
-                        <li><a href="#/search">Add</a></li>
-                        <li><a href="#/assign">Filepaths</a></li>
-                    </ul>
-                    <ul class="nav nav-list">
-                        <li class="nav-header"><a>Settings</a></li>
-                    </ul>
-                </div>
-            </nav>
-            <div id="content" data-ng-view class="span10"></div>
-        </div>
+    <div id="container" class="container">
+        <nav id="nav-menu">
+            <div class="nav-wrapper">
+                <ul class="nav nav-list">
+                    <li class="nav-header"><a href="#/">Home</a></li>
+                </ul>
+                <ul class="nav nav-list">
+                    <li class="nav-header"><a href="#/entries/">Media</a></li>
+                </ul>
+                <ul class="nav nav-list">
+                    <li class="nav-header"><a><span class="icon-cog"></span></a></li>
+                </ul>
+            </div>
+        </nav>
+        <div id="content" data-ng-view></div>
     </div>
 </body>
 </html>

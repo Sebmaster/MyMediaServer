@@ -6,7 +6,21 @@ img.small-cover {
     cursor: pointer;
 }
 
-@media (max-width: 767px) {
+
+#container {
+    position: relative;
+}
+
+#nav-menu {
+    position: fixed;
+    background-color: white;
+}
+
+#nav-menu + * {
+    margin-top: 37px;
+}
+
+/*@media (max-width: 767px) {*/
     nav {
         text-align: center;
     }
@@ -19,4 +33,4 @@ img.small-cover {
         float: left;
         text-align: center;
     }
-}
+/*}*/
