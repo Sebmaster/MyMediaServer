@@ -4,7 +4,8 @@
 	ffmpegPath: 'ffmpeg',
 	transcode: false, // bool
 	transcodeParameters: {
-		misc: ['-vb', '1M', '-threads', 4]
+		bandwidth: '1M',
+		misc: ['-threads', 4]
 	},
 
 
