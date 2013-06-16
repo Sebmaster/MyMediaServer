@@ -52,7 +52,7 @@ function deliverHLSPath(reqPath, encode, res, retries) {
 	var idx = reqPath.lastIndexOf('/hls/');
 	fs.readFile(encode.tmpPath + '/' + reqPath.substring(idx + 5), function (err, data) {
 		var match;
-		if (err || (isPlaylist && (!(match = data.toString().match(/.ts/g)) || match.length < 2))) {
+		if (encode.ffmpeg && (err || (isPlaylist && (!(match = data.toString().match(/.ts/g)) || match.length < 2)))) {
 			if (retries) {
 				setTimeout(function () {
 					deliverHLSPath(reqPath, encode, res, retries - 1);
@@ -140,6 +140,10 @@ module.exports = function () {
 
 						var ffmpeg = spawn('ffmpeg', options, { cwd: tmpPath });
 						runningEncodes[target] = { lastAccess: Date.now(), tmpPath: tmpPath, ffmpeg: ffmpeg };
+
+						ffmpeg.on('exit', function () {
+							runningEncodes[target].ffmpeg = null;
+						});
 
 						deliverHLSPath(uri, runningEncodes[target], res, 20);
 					});
