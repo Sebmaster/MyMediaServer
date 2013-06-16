@@ -30,6 +30,7 @@ nav .nav.nav-list {
 }
 
 .fullscreen {
+    background-color: rgba(0,0,0,0.5);
     position: fixed;
     top: 0;
     left: 0;
@@ -43,12 +44,4 @@ nav .nav.nav-list {
     left: 5%;
     width: 90%;
     height: 90%;
-}
-
-.flowplayer .fp-fallback {
-    display: none;
-}
-
-.flowplayer.is-error .fp-fallback {
-    display: block;
 }
