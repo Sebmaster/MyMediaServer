@@ -72,7 +72,10 @@ function processMalRequest(entry, data) {
 exports.refreshMetadata = function (model, id) {
 	var entries = {};
 	if (id) {
-		entries[id] = model.get('entries.' + id);
+		var entry = model.get('entries.' + id);
+		if (entry) {
+			entries[id] = entry;
+		}
 	} else {
 		entries = model.get('entries');
 	}
