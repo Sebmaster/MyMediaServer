@@ -20,17 +20,11 @@ img.small-cover {
     margin-top: 37px;
 }
 
-/*@media (max-width: 767px) {*/
-    nav {
-        text-align: center;
-    }
+nav .nav-wrapper {
+    display: inline-block;
+}
 
-    nav .nav-wrapper {
-        display: inline-block;
-    }
-
-    nav .nav.nav-list {
-        float: left;
-        text-align: center;
-    }
-/*}*/
+nav .nav.nav-list {
+    float: left;
+    text-align: center;
+}
