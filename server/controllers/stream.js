@@ -101,7 +101,7 @@ module.exports = function () {
 			if (codec === 'webm') {
 				var options = prepareOptionsWebM(target, targetWidth);
 
-				var ffmpeg = spawn(__dirname + '/ffmpeg', options, { cwd: __dirname });
+				var ffmpeg = spawn(config.ffmpegPath, options, { cwd: __dirname });
 
 				req.on('close', function () {
 					ffmpeg.kill();
@@ -115,7 +115,7 @@ module.exports = function () {
 			} else if (codec === 'flv') {
 				var options = prepareOptionsFlv(target, targetWidth);
 
-				var ffmpeg = spawn('ffmpeg', options, { cwd: __dirname });
+				var ffmpeg = spawn(config.ffmpegPath, options, { cwd: __dirname });
 
 				req.on('close', function () {
 					ffmpeg.kill();
@@ -138,7 +138,7 @@ module.exports = function () {
 
 						var options = prepareOptionsHls(target, targetWidth);
 
-						var ffmpeg = spawn('ffmpeg', options, { cwd: tmpPath });
+						var ffmpeg = spawn(config.ffmpegPath, options, { cwd: tmpPath });
 						runningEncodes[target] = { lastAccess: Date.now(), tmpPath: tmpPath, ffmpeg: ffmpeg };
 
 						ffmpeg.on('exit', function () {

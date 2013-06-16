@@ -1,6 +1,7 @@
 ﻿module.exports = {
 	mongoUrl: '', // mongo url (no protocol)
 	mediaPath: '/media', // root path to media library
+	ffmpegPath: 'ffmpeg',
 	transcode: false, // bool
 	transcodeParameters: {
 		misc: ['-vb', '1M', '-threads', 4]
