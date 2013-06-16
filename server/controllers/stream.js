@@ -39,8 +39,11 @@ function prepareOptionsFlv(target, targetWidth) {
 function killEncode() {
 	for (var target in runningEncodes) {
 		var encode = runningEncodes[target];
-		if (encode.lastAccess < Date.now() - 30000) {
-			encode.ffmpeg.kill();
+		if (!encode.ffmpeg || encode.lastAccess < Date.now() - 30000) {
+			if (encode.ffmpeg) {
+				encode.ffmpeg.kill();
+			}
+
 			rimraf(encode.tmpPath, function () { });
 			delete runningEncodes[target];
 		}
