@@ -233,27 +233,26 @@ function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 
 	$scope.play = function (episode) {
 		$scope.video = {src: episode.path, size: Math.max(window.screen.width, window.screen.height)};
+	};
 
-		$scope.initFlow = function (evt) {
-			function fallback() {
-				var vlc = jQuery('<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" version="VideoLAN.VLCPlugin.2" width="100%" height="100%">');
-				jQuery('.videoPlayer').html(vlc);
+	$scope.initFlow = function (evt) {
+		function fallback() {
+			var vlc = jQuery('<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" version="VideoLAN.VLCPlugin.2" width="100%" height="100%">');
+			jQuery('.videoPlayer').html(vlc);
 
-				if (vlc[0].VersionInfo) {
-					vlc[0].playlist.add('/stream/' + encodeURI(episode.path) + '/webm/?size=' + Math.max(window.screen.width, window.screen.height), episode.title, '');
-					vlc[0].playlist.play();
-				}
+			if (vlc[0].VersionInfo) {
+				vlc[0].playlist.add('/stream/' + encodeURI(episode.path) + '/webm/?size=' + Math.max(window.screen.width, window.screen.height), episode.title, '');
+				vlc[0].playlist.play();
 			}
+		}
 
-			setTimeout(function () {
-				jQuery('.flowplayer').on('error', fallback).flowplayer();
-			}, 0);
-		};
+		setTimeout(function () {
+			jQuery('.flowplayer').on('error', fallback).flowplayer({ embed: false });
+		}, 0);
+	};
 
-		$scope.closeVideo = function (evt) {
-			console.log(evt);
-			$scope.video = null;
-		};
+	$scope.closeVideo = function (evt) {
+		$scope.video = null;
 	};
 	/*
 	$scope.$watch('entry.title', function () {
