@@ -47,7 +47,9 @@
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="episode in season.episodes">
-                                <td style="vertical-align: middle"><button data-ng-click="play(episode)" data-ng-show="episode.path" class="btn"><span class="icon-play"></span></button></td>
+                                <td style="vertical-align: middle">
+                                    <button data-ng-click="play(episode)" data-ng-show="episode.path" class="btn"><span class="icon-play"></span></button>
+                                </td>
                                 <td style="vertical-align: middle">{{episode.episode}}</td>
                                 <td style="vertical-align: middle">{{episode.title}}</td>
                             </tr>
@@ -56,5 +58,15 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+<div class="fullscreen" data-ng-click="closeVideo($event)" data-ng-if="video">
+    <div class="flowplayer videoPlayer" data-native_fullscreen="true" data-ng-init="initFlow($event)" data-ng-click="$event.stopPropagation()">
+        <video autoplay controls>
+            <source type="video/webm" src="/stream/{{video.src}}/webm/?size={{video.size}}">
+            <source type="application/vnd.apple.mpegurl" src="/stream/{{video.src}}/hls/playlist.m3u8?size={{video.size}}">
+            <source type="video/flash" src="/stream/{{video.src}}/flv/?size={{video.size}}">
+        </video>
     </div>
 </div>

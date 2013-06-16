@@ -219,6 +219,7 @@ EntryListCtrl.$inject = ['$scope', '$routeParams', 'model', '$location', '$rootS
 
 function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 	$scope.entry = model.get('entries.' + $routeParams.id);
+	$scope.video = null;
 
 	$scope.$watch('entry.id', function () {
 		if (!$scope.entry.id) return;
@@ -231,55 +232,28 @@ function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 	});
 
 	$scope.play = function (episode) {
-		function fallback() {
-			var vlc = jQuery('<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" version="VideoLAN.VLCPlugin.2" width="100%" height="100%">');
-			wrapper.empty().append(vlc);
+		$scope.video = {src: episode.path, size: Math.max(window.screen.width, window.screen.height)};
 
-			if (vlc[0].VersionInfo) {
-				vlc[0].playlist.add('/stream/' + encodeURI(episode.path) + '/webm/?size=' + Math.max(window.screen.width, window.screen.height), episode.title, '');
-				vlc[0].playlist.play();
-			} else {
-				var flash = jQuery('<div id="videoElem" style="background-color: grey"><script type="text/javascript" src="/jwplayer.js"></script><a href="/stream/' + encodeURI(episode.path) + '">Download here</a></div>');
-				wrapper.empty().append(flash);
+		$scope.initFlow = function (evt) {
+			function fallback() {
+				var vlc = jQuery('<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" version="VideoLAN.VLCPlugin.2" width="100%" height="100%">');
+				jQuery('.videoPlayer').html(vlc);
 
-				if (jwplayer) {
-					jwplayer("videoElem").setup({
-						file: '/stream/' + episode.path + '/flv/test.flv?size=' + Math.max(window.screen.width, window.screen.height),
-						autostart: true,
-						width: '100%',
-						height: '100%',
-						fallback: false
-					});
+				if (vlc[0].VersionInfo) {
+					vlc[0].playlist.add('/stream/' + encodeURI(episode.path) + '/webm/?size=' + Math.max(window.screen.width, window.screen.height), episode.title, '');
+					vlc[0].playlist.play();
 				}
 			}
-		}
 
-		var wrapper = jQuery('<div>').css({ position: 'fixed', top: '5%', left: '5%', width: '90%', height: '90%' }).appendTo('body');
-		var vid = jQuery('<video autoplay controls width="100%" height="100%">')
-			.one('error', fallback)
-			.appendTo(wrapper);
-		
-		jQuery('<source>')
-			.prop('src', '/stream/' + episode.path + '/webm/?size=' + Math.max(window.screen.width, window.screen.height))
-			.prop('type', 'video/webm')
-			.appendTo(vid);
-			
-		jQuery('<source>')
-			.prop('src', '/stream/' + episode.path + '/hls/playlist.m3u8?size=' + Math.max(window.screen.width, window.screen.height))
-			.prop('type', 'application/vnd.apple.mpegurl')
-			.appendTo(vid)
-			.one('error', fallback);
-
-		var fn = function (e) {
-			if (e.keyCode === 27 || (!e.keyCode && !wrapper.children().is(e.target))) {
-				wrapper.remove();
-				jQuery(document).off('keydown', fn).off('click', fn);
-			}
+			setTimeout(function () {
+				jQuery('.flowplayer').on('error', fallback).flowplayer();
+			}, 0);
 		};
 
-		setTimeout(function () {
-			jQuery(document).on('keydown', fn).on('click', fn);
-		}, 0);
+		$scope.closeVideo = function (evt) {
+			console.log(evt);
+			$scope.video = null;
+		};
 	};
 	/*
 	$scope.$watch('entry.title', function () {
