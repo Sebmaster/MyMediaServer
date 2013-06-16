@@ -142,7 +142,9 @@ module.exports = function () {
 						runningEncodes[target] = { lastAccess: Date.now(), tmpPath: tmpPath, ffmpeg: ffmpeg };
 
 						ffmpeg.on('exit', function () {
-							runningEncodes[target].ffmpeg = null;
+							if (runningEncodes[target]) {
+								runningEncodes[target].ffmpeg = null;
+							}
 						});
 
 						deliverHLSPath(uri, runningEncodes[target], res, 20);
