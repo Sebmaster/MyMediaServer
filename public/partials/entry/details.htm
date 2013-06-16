@@ -62,12 +62,17 @@
 </div>
 
 <div class="fullscreen" data-ng-click="closeVideo($event)" data-ng-if="video">
-    <div class="flowplayer no-time videoPlayer" data-native_fullscreen="true" data-ng-init="initFlow($event)" data-ng-click="$event.stopPropagation()">
+    <div data-ng-if="video.fallback == 0" class="flowplayer no-time videoPlayer" data-embed="false" data-native_fullscreen="true" data-ng-init="initFlow($event)" data-ng-click="$event.stopPropagation()">
         <video autoplay controls>
-            <source type="video/webm" src="/stream/{{video.src}}/webm/?size={{video.size}}">
+            <!--<source type="video/webm" src="/stream/{{video.src}}/webm/?size={{video.size}}">-->
             <source type="application/vnd.apple.mpegurl" src="/stream/{{video.src}}/hls/playlist.m3u8?size={{video.size}}">
-            <source type="video/flash" src="/stream/{{video.src}}/flv/?size={{video.size}}">
-            <source src="/stream/{{video.src}}">
+    </div>
+    <div data-ng-if="video.fallback == 1" class="flowplayer no-time videoPlayer" data-embed="false" data-ng-init="initFlow($event)" data-ng-click="$event.stopPropagation()">
+        <video autoplay controls>
+            <source type="video/abxc" src="/stream/{{video.src}}/flv/?size={{video.size}}">
         </video>
+    </div>
+    <div data-ng-if="video.fallback == 3" class="videoPlayer" data-ng-click="$event.stopPropagation()">
+        No suitable player found. Download <a href="/stream/{{video.src}}">here</a>.
     </div>
 </div>
