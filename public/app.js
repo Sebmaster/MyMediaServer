@@ -245,6 +245,8 @@ function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 					jQuery(this).html(vlc);
 					
 					if (vlc[0].VersionInfo) {
+						vlc[0].playlist.add('/stream/' + encodeURI($scope.video.src) + '/webm/?size=' + $scope.video.size, 'Stream', '');
+						vlc[0].playlist.add('/stream/' + encodeURI($scope.video.src) + '/hls/?size=' + $scope.video.size, 'Stream', '');
 						vlc[0].playlist.add('/stream/' + encodeURI($scope.video.src) + '/flv/?size=' + $scope.video.size, 'Stream', '');
 						vlc[0].playlist.play();
 					} else {
