@@ -112,7 +112,6 @@ module.exports = function () {
 
 				if (codec === 'webm') {
 					if (!config.transcode) {
-						console.log('no transcode');
 						res.send(404);
 						return;
 					}
@@ -121,8 +120,17 @@ module.exports = function () {
 
 					var ffmpeg = spawn(config.ffmpegPath, options, { cwd: __dirname });
 
-					req.on('close', function () {
-						ffmpeg.kill();
+					res.once('close', function () {
+						if (ffmpeg) {
+							ffmpeg.kill();
+						}
+						ffmpeg = null;
+					});
+					res.once('finish', function () {
+						if (ffmpeg) {
+							ffmpeg.kill();
+						}
+						ffmpeg = null;
 					});
 
 					res.writeHead(200, {
@@ -131,15 +139,23 @@ module.exports = function () {
 					});
 					ffmpeg.stdout.pipe(res);
 				} else if (codec === 'flv') {
-					console.log('flash requested');
 					var options = prepareOptionsFlv(target, targetWidth);
 					console.log(options.join(' '));
 
 					var ffmpeg = spawn(config.ffmpegPath, options, { cwd: __dirname });
 					ffmpeg.stderr.on('data', function (data) { console.log(data.toString()); });
 
-					req.on('close', function () {
-						ffmpeg.kill();
+					res.once('close', function () {
+						if (ffmpeg) {
+							ffmpeg.kill();
+						}
+						ffmpeg = null;
+					});
+					res.once('finish', function () {
+						if (ffmpeg) {
+							ffmpeg.kill();
+						}
+						ffmpeg = null;
 					});
 
 					res.writeHead(200, {
