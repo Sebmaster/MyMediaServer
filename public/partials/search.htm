@@ -17,7 +17,7 @@
             <tbody>
                 <tr data-ng-repeat="entry in search.results.trakt">
                     <td style="vertical-align: middle" data-ng-click="addToLibrary(entry)">
-                        <span class="btn"><span title="Add to my library" class="icon-th"></span></span>
+                        <span class="btn" data-ng-hide="entryExists(entry.metadataProvider, entry.metadataId)"><span title="Add to my library" class="icon-th"></span></span>
                     </td>
                     <td>
                         <img class="small-cover thumbnail" data-ng-src="{{entry.image}}"></td>
@@ -26,7 +26,7 @@
                 </tr>
                 <tr data-ng-repeat="entry in search.results.movies">
                     <td style="vertical-align: middle" data-ng-click="addToLibrary(entry)">
-                        <span class="btn"><span title="Add to my library" class="icon-th"></span></span>
+                        <span class="btn" data-ng-hide="entryExists(entry.metadataProvider, entry.metadataId)"><span title="Add to my library" class="icon-th"></span></span>
                     </td>
                     <td>
                         <img class="small-cover thumbnail" data-ng-src="{{entry.image}}"></td>
@@ -50,7 +50,7 @@
             <tbody>
                 <tr data-ng-repeat="entry in search.results.mal">
                     <td style="vertical-align: middle" data-ng-click="addToLibrary(entry)">
-                        <span class="btn"><span title="Add to my library" class="icon-th"></span></span>
+                        <span class="btn" data-ng-hide="entryExists(entry.metadataProvider, entry.metadataId)"><span title="Add to my library" class="icon-th"></span></span>
                     </td>
                     <td>
                         <img class="small-cover thumbnail" data-ng-src="{{entry.image}}"></td>

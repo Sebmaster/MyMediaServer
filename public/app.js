@@ -86,6 +86,17 @@ function IndexCtrl($scope) {
 IndexCtrl.$inject = ['$scope'];
 
 function SearchCtrl($scope, $http, $location, model) {
+	var entries = model.get('entries');
+
+	$scope.entryExists = function (provider, id) {
+		for (var key in entries) {
+			if (entries[key].metadataProvider === provider && entries[key].metadataId == id) {
+				return true;
+			}
+		}
+		return false;
+	};
+
 	$scope.search = { query: $location.search().query, results: { mal: [], trakt: [], movies: [] } };
 
 	$scope.addToLibrary = function (entry) {
@@ -232,7 +243,7 @@ function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 	});
 
 	$scope.play = function (episode) {
-		$scope.video = {src: episode.path, size: Math.max(window.screen.width, window.screen.height), fallback: 0};
+		$scope.video = { src: episode.path, size: Math.max(window.screen.width, window.screen.height), fallback: 0 };
 	};
 
 	$scope.initFlow = function (evt) {
@@ -243,7 +254,7 @@ function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 				if ($scope.video.fallback === 2) {
 					var vlc = jQuery('<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" version="VideoLAN.VLCPlugin.2" width="100%" height="100%">');
 					jQuery(this).html(vlc);
-					
+
 					if (vlc[0].VersionInfo) {
 						vlc[0].playlist.add('/stream/' + encodeURI($scope.video.src) + '/webm/?size=' + $scope.video.size, 'Stream', '');
 						vlc[0].playlist.add('/stream/' + encodeURI($scope.video.src) + '/hls/?size=' + $scope.video.size, 'Stream', '');
