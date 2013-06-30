@@ -41,18 +41,18 @@ utils.registerController(app, '/stream', require('./server/controllers/stream')(
 utils.registerController(app, '/api/files', require('./server/controllers/files')(serverModel));
 utils.registerController(app, '/api/entries', require('./server/controllers/entries')(serverModel));
 
-app.get('/model', function (req, res) {
-	var model = store.createModel();
-	model.subscribe('entries', function (err, entries) {
-		if (err) {
-			res.status(500);
-			res.send(err);
-		} else {
+var model = store.createModel();
+model.subscribe('entries', function (err, entries) {
+	if (err) {
+		res.status(500);
+		res.send(err);
+	} else {
+		app.get('/model', function (req, res) {
 			model.bundle(function (err, bundle) {
 				res.send(JSON.stringify(bundle));
 			});
-		}
-	});
+		});
+	}
 });
 
 store.bundle(__dirname + '/racer-angular.js', function (err, js) {
