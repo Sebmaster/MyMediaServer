@@ -45,7 +45,3 @@ nav .nav.nav-list {
     width: 90%;
     height: 90%;
 }
-
-.videoPlayer video {
-    max-height: 100%;
-}
