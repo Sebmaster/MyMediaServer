@@ -70,7 +70,7 @@
     </div>
     <div data-ng-if="video.fallback == 1" class="flowplayer no-time videoPlayer" data-embed="false" data-flashfit="true" data-ng-init="initFlow($event)" data-ng-click="$event.stopPropagation()">
         <video autoplay controls>
-            <source type="video/flash" src="/stream/{{video.src}}/flv/?size={{video.size}}">
+            <source type="video/flash" src="{{origin}}stream/{{video.src}}/flv/?size={{video.size}}">
         </video>
     </div>
     <div data-ng-if="video.fallback == 3" class="videoPlayer" data-ng-click="$event.stopPropagation()">

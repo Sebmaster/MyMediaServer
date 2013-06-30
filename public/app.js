@@ -231,6 +231,7 @@ EntryListCtrl.$inject = ['$scope', '$routeParams', 'model', '$location', '$rootS
 function EntryDetailCtrl($scope, $routeParams, model, $http, $root) {
 	$scope.entry = model.get('entries.' + $routeParams.id);
 	$scope.video = null;
+	$scope.origin = window.location.protocol + '//' + window.location.host + '/';
 
 	$scope.$watch('entry.id', function () {
 		if (!$scope.entry.id) return;
