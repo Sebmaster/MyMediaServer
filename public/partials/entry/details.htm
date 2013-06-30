@@ -73,7 +73,12 @@
             <source type="video/flash" src="{{origin}}stream/{{video.src}}/flv/?size={{video.size}}">
         </video>
     </div>
-    <div data-ng-if="video.fallback == 3" class="videoPlayer" data-ng-click="$event.stopPropagation()">
+    <div data-ng-if="video.fallback == 3" class="flowplayer videoPlayer" data-embed="false" data-native_fullscreen="true" data-ng-click="$event.stopPropagation()">
+        <video autoplay controls>
+            <source src="/stream/{{video.src}}">
+        </video>
+    </div>
+    <div data-ng-if="video.fallback == 4" class="videoPlayer" data-ng-click="$event.stopPropagation()">
         No suitable player found. Download <a href="/stream/{{video.src}}">here</a>.
     </div>
 </div>
