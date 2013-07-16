@@ -367,7 +367,7 @@ EntryDetailCtrl.$inject = ['$scope', '$routeParams', 'model', '$http', '$rootSco
 
 function EntryPathCtrl($scope, $routeParams, model, $http, $root) {
 	$scope.availableRegexes = {
-		'S?((\\d+)(e|x))(\\d+)': 'Season (opt.) + Episode',
+		'S?((\\d+)(e|x))(\\d+)': 'Season + Episode',
 		'()()()(\\d+)': 'Episode-Only'
 	};
 	$scope.assignRegex = _.keys($scope.availableRegexes)[0];
