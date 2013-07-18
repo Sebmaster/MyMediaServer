@@ -23,7 +23,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="item in previewItems" data-ng-class="{success: matchPreview(item)}">
+            <tr data-ng-repeat="item in previewItems" data-ng-show="matchPreview(item)">
                 <td>{{item.title}}</td>
                 <td>{{item.summary}}</td>
                 <td>{{item.categories.join(', ')}}</td>
