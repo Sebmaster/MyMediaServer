@@ -1,5 +1,5 @@
 ﻿<form class="form-horizontal" data-ng-submit="saveDir()">
-    <input type="text" data-ng-model="downloadDir"> <button class="btn" data-ng-click="suggest()">Use title</button> <input class="btn" type="submit" value="Apply">
+    <input type="text" data-ng-model="downloadDir"> <input class="btn" type="submit" value="Apply"> <button class="btn" data-ng-click="suggest();$event.preventDefault()">Use title</button>
 </form>
 
 <h4>Add source</h4>
@@ -12,7 +12,7 @@
     <input type="submit" class="btn" value="Add">
 </form>
 
-<div data-ng-show="previewItems.length">
+<div data-ng-show="source.previewItems.length">
     <h5>preview items</h5>
     <table class="table">
         <thead>
@@ -23,7 +23,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="item in previewItems" data-ng-show="matchPreview(item)">
+            <tr data-ng-repeat="item in source.previewItems" data-ng-show="matchPreview(item)">
                 <td>{{item.title}}</td>
                 <td>{{item.summary}}</td>
                 <td>{{item.categories.join(', ')}}</td>

@@ -461,8 +461,12 @@ function EntryDownloadCtrl($scope, $routeParams, model, $http, $root) {
 	$scope.downloadDir = $scope.entry.downloadDir;
 	$scope.previewItems = [];
 
+	$root.title(function () {
+		return 'Download - ' + $scope.entry.title;
+	});
+
 	$scope.suggest = function () {
-		$scope.path = $scope.entry.title;
+		$scope.downloadDir = $scope.entry.title;
 	};
 
 	$scope.saveDir = function () {
@@ -470,8 +474,8 @@ function EntryDownloadCtrl($scope, $routeParams, model, $http, $root) {
 	};
 
 	$scope.add = function () {
-		$scope.source = {};
 		model.push('entries.' + $routeParams.id + '.sources', $scope.source);
+		$scope.source = {};
 	};
 
 	$scope.remove = function (idx) {
@@ -483,7 +487,7 @@ function EntryDownloadCtrl($scope, $routeParams, model, $http, $root) {
 		$http.post('/api/downloads/preview', { url: url }).success(function (data) {
 			if (url !== $scope.source.url) return;
 
-			$scope.previewItems = data;
+			$scope.source.previewItems = data;
 		});
 	};
 
