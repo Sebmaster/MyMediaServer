@@ -1,7 +1,22 @@
 ﻿var request = require('request');
 var FeedParser = require('feedparser');
+var _ = require('lodash');
+
+var config = require('../../config');
 
 module.exports = function (model) {
+	setInterval(function () {
+		var entries = _.values(model.get('entries'));
+		for (var i = 0; i < entries.length; ++i) {
+			var entry = entries[i];
+
+			if (entry.downloadDir && entry.sources && entry.sources.length) {
+				
+			}
+		}
+	}, config.rssRefresh);
+
+
 	return {
 		post: {
 			preview: function (req, res, next) {
