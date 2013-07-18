@@ -458,14 +458,19 @@ EntryPathCtrl.$inject = ['$scope', '$routeParams', 'model', '$http', '$rootScope
 function EntryDownloadCtrl($scope, $routeParams, model, $http, $root) {
 	$scope.source = {};
 	$scope.entry = model.get('entries.' + $routeParams.id);
-	$scope.path = null;
+	$scope.downloadDir = $scope.entry.downloadDir;
 	$scope.previewItems = [];
 
 	$scope.suggest = function () {
 		$scope.path = $scope.entry.title;
 	};
 
+	$scope.saveDir = function () {
+		model.set('entries.' + $routeParams.id + '.downloadDir', $scope.downloadDir);
+	};
+
 	$scope.add = function () {
+		$scope.source = {};
 		model.push('entries.' + $routeParams.id + '.sources', $scope.source);
 	};
 
