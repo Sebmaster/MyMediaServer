@@ -25,7 +25,7 @@ var http = require('http');
 var server = http.createServer(app);
 
 if (process.env.NODE_ENV === 'production') {
-	app.use(express.basicAuth('test', 'test'));
+	app.use(express.basicAuth(config.user, config.password));
 }
 
 app.use(express.static(__dirname + '/public'));
