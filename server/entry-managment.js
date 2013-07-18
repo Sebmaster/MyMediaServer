@@ -55,8 +55,6 @@ function processMalRequest(entry, data) {
 	entry.genres = data.genres;
 	entry.image = data.image_url;
 
-	entry.seasons = [];
-
 	/*
 	for (var i = 0; i < data.episodes; ++i) {
 		entry.episodes[i] = {
