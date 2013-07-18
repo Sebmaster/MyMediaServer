@@ -24,6 +24,10 @@ var app = express();
 var http = require('http');
 var server = http.createServer(app);
 
+if (process.env.NODE_ENV === 'production') {
+	app.use(express.basicAuth('test', 'test'));
+}
+
 app.use(express.static(__dirname + '/public'));
 app.use(require('racer-browserchannel')(store));
 app.use(express.bodyParser());
