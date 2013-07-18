@@ -9,6 +9,7 @@ angular.module('MyMediaServer', ['racer.js', 'ngSanitize']).
 			when('/entries', { templateUrl: '/partials/entry/list.htm', controller: EntryListCtrl, resolve: EntryListCtrl.resolve }).
 			when('/entries/:id', { templateUrl: '/partials/entry/details.htm', controller: EntryDetailCtrl, resolve: EntryDetailCtrl.resolve }).
 			when('/entries/:id/path', { templateUrl: '/partials/entry/path.htm', controller: EntryPathCtrl, resolve: EntryPathCtrl.resolve }).
+			when('/entries/:id/download', { templateUrl: '/partials/entry/download.htm', controller: EntryDownloadCtrl, resolve: EntryDownloadCtrl.resolve }).
 			otherwise({ redirectTo: '/' });
 	}]).
 	filter('transform', ['$parse', function ($parse) {
@@ -453,3 +454,60 @@ EntryPathCtrl.resolve = {
 EntryPathCtrl.resolve.model.$inject = ['racer'];
 
 EntryPathCtrl.$inject = ['$scope', '$routeParams', 'model', '$http', '$rootScope'];
+
+function EntryDownloadCtrl($scope, $routeParams, model, $http, $root) {
+	$scope.source = {};
+	$scope.entry = model.get('entries.' + $routeParams.id);
+	$scope.path = null;
+	$scope.previewItems = [];
+
+	$scope.suggest = function () {
+		$scope.path = $scope.entry.title;
+	};
+
+	$scope.add = function () {
+		model.push('entries.' + $routeParams.id + '.sources', $scope.source);
+	};
+
+	$scope.remove = function (idx) {
+		model.remove('entries.' + $routeParams.id + '.sources', idx);
+	};
+
+	$scope.preview = function () {
+		var url = $scope.source.url;
+		$http.post('/api/downloads/preview', { url: url }).success(function (data) {
+			if (url !== $scope.source.url) return;
+
+			$scope.previewItems = data;
+		});
+	};
+
+	$scope.matchPreview = function (item) {
+		if (($scope.source.regex && !item.title.match(new RegExp($scope.source.regex, 'i'))) ||
+			($scope.source.category && item.categories.indexOf($scope.source.category) === -1)) {
+			return false;
+		}
+
+		if ($scope.source.contains) {
+			var split = $scope.source.contains.split(' ');
+			var lowertitle = item.title.toLowerCase();
+
+			for (var i=0; i < split.length; ++i) {
+				if (lowertitle.indexOf(split[i].toLowerCase()) === -1) {
+					return false;
+				}
+			}
+		}
+
+		return true;
+	};
+}
+
+EntryDownloadCtrl.resolve = {
+	model: function (racer) {
+		return racer;
+	}
+};
+EntryDownloadCtrl.resolve.model.$inject = ['racer'];
+
+EntryDownloadCtrl.$inject = ['$scope', '$routeParams', 'model', '$http', '$rootScope'];

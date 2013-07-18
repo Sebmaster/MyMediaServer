@@ -1,0 +1,56 @@
+﻿<form class="form-horizontal">
+    <input type="text" data-ng-model="path"> <button class="btn" data-ng-click="suggest()">Use title</button> <input class="btn" type="submit" value="Apply">
+</form>
+
+<h4>Add source</h4>
+<form data-ng-submit="add()">
+    <input type="url" name="source" data-ng-model="source.url" data-ng-change="preview()" placeholder="URL" required><br>
+    <input type="text" name="contains" data-ng-model="source.contains" placeholder="Contains"><br>
+    <input type="text" name="regex" data-ng-model="source.regex" placeholder="Regex"><br>
+    <input type="text" name="category" data-ng-model="source.category" placeholder="Category"><br>
+    <label class="checkbox"><input type="checkbox"> Check even if all episodes downloaded</label>
+    <input type="submit" class="btn" value="Add">
+</form>
+
+<div data-ng-show="previewItems.length">
+    <h5>preview items</h5>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Summary</th>
+                <th>Categories</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-ng-repeat="item in previewItems" data-ng-class="{success: matchPreview(item)}">
+                <td>{{item.title}}</td>
+                <td>{{item.summary}}</td>
+                <td>{{item.categories.join(', ')}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<h4>Existing sources</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Source-URL</th>
+            <th>Contains</th>
+            <th>Regex</th>
+            <th>Category</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr data-ng-repeat="source in entry.sources">
+            <td>{{source.url}}</td>
+            <td>{{source.contains}}</td>
+            <td>{{source.regex}}</td>
+            <td>{{source.category}}</td>
+            <td><button data-ng-click="remove($index)" class="btn"><span class="icon-remove"></span></button></td>
+        </tr>
+    </tbody>
+</table>

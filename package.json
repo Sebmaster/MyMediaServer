@@ -11,7 +11,8 @@
 		"walk": "x",
 		"q": "x",
 		"temp": "x",
-		"rimraf": "x"
+		"rimraf": "x",
+		"feedparser": "x"
 	},
 	"scripts": {
 		"start": "node server.js"

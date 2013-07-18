@@ -44,6 +44,7 @@ app.get('/config.js', function (req, res) {
 utils.registerController(app, '/stream', require('./server/controllers/stream')());
 utils.registerController(app, '/api/files', require('./server/controllers/files')(serverModel));
 utils.registerController(app, '/api/entries', require('./server/controllers/entries')(serverModel));
+utils.registerController(app, '/api/downloads', require('./server/controllers/downloads')(serverModel));
 
 var model = store.createModel();
 model.subscribe('entries', function (err, entries) {
