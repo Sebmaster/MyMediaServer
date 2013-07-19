@@ -16,5 +16,17 @@
 	auth: {
 		user: 'test',
 		password: 'test'
-	}
+	},
+
+	transmission: {
+		username: '',
+		password: '',
+		host: 'localhost',
+		port: 9091,
+		removeOnFinish: true,
+		refreshInterval: 2 * 60 * 1000,
+		downloadDir: ''
+	},
+
+	rssRefresh: 30 * 60 * 1000
 };

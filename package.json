@@ -13,7 +13,8 @@
 		"temp": "x",
 		"rimraf": "x",
 		"feedparser": "x",
-		"mkdirp": "x"
+		"mkdirp": "x",
+		"transmission": "x"
 	},
 	"scripts": {
 		"start": "node server.js"
