@@ -12,7 +12,8 @@
 		"q": "x",
 		"temp": "x",
 		"rimraf": "x",
-		"feedparser": "x"
+		"feedparser": "x",
+		"mkdirp": "x"
 	},
 	"scripts": {
 		"start": "node server.js"

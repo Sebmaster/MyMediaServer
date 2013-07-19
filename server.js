@@ -3,6 +3,8 @@ var express = require('express');
 var config = require('./config');
 var utils = require('./utils');
 var entryManagment = require('./server/entry-managment');
+var path = require('path');
+var mkdirp = require('mkdirp');
 
 var store = racer.createStore({
 	server: server,
@@ -18,6 +20,9 @@ function refreshData(idx, id) {
 serverModel.on('insert', '$queries.["entries",{},null].ids', refreshData);
 serverModel.on('change', 'entries.*.metadataProvider', refreshData);
 serverModel.on('change', 'entries.*.metadataId', refreshData);
+serverModel.on('change', 'entries.*.downloadDir', function (idx) {
+	mkdirp(path.join(config.mediaPath, serverModel.get('entries.' + idx + '.downloadDir')));
+});
 
 
 var app = express();
