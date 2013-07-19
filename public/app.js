@@ -391,6 +391,14 @@ function EntryDownloadCtrl($scope, $routeParams, model, $http, $root) {
 	};
 
 	$scope.saveDir = function () {
+		var idx = $scope.entry.paths.indexOf($scope.entry.downloadDir);
+		if (idx !== -1) {
+			model.remove('entries.' + $scope.entry.id + '.paths', idx);
+		}
+		idx = $scope.entry.paths.indexOf($scope.downloadDir);
+		if (idx === -1) {
+			model.push('entries.' + $scope.entry.id + '.paths', $scope.downloadDir);
+		}
 		model.set('entries.' + $routeParams.id + '.downloadDir', $scope.downloadDir);
 	};
 
