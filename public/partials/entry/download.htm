@@ -32,7 +32,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="item in source.previewItems" data-ng-show="matchPreview(item)">
+            <tr data-ng-repeat="item in source.previewItems | filter: matchPreview | limitTo: 20">
                 <td>{{item.title}}</td>
                 <td>{{item.summary}}</td>
                 <td>{{item.categories.join(', ')}}</td>
