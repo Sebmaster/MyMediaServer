@@ -361,6 +361,9 @@ function EntryPathCtrl($scope, $routeParams, model, $http, $root) {
 						break;
 					}
 				}
+				if (j === $scope.entry.seasons.length ||
+					!$scope.entry.seasons[j].episodes[file.episode - 1]) continue;
+
 				model.set('entries.' + $scope.entry.id + '.seasons.' + j + '.episodes.' + (file.episode - 1) + '.path', file.path);
 			}
 		}
