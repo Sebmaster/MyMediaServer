@@ -8,6 +8,16 @@
     <input type="text" name="contains" data-ng-model="source.contains" placeholder="Contains"><br>
     <input type="text" name="regex" data-ng-model="source.regex" placeholder="Regex"><br>
     <input type="text" name="category" data-ng-model="source.category" placeholder="Category"><br>
+    <select data-ng-model="source.assignMethod" data-ng-init="source.assignMethod = 'sxe'">
+        <option value="sxe">SeasonxEpisode (S01E01)</option>
+        <option value="se">SeasonEpisode (101)</option>
+        <option value="e">Episode only (01)</option>
+        <option value="numbered">numbered episode (528)</option>
+    </select><br>
+    <div data-ng-if="source.assignMethod == 'e'">
+        <input type="number" class="input-mini" data-ng-model="source.assignSeason" placeholder="Staffel" min="0" required>
+    </div>
+    
     <input type="submit" class="btn" value="Add">
 </form>
 
