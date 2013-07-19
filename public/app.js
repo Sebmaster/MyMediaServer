@@ -422,7 +422,7 @@ function EntryDownloadCtrl($scope, $routeParams, model, $http, $root) {
 			var split = $scope.source.contains.split(' ');
 			var lowertitle = item.title.toLowerCase();
 
-			for (var i=0; i < split.length; ++i) {
+			for (var i = 0; i < split.length; ++i) {
 				if (lowertitle.indexOf(split[i].toLowerCase()) === -1) {
 					return false;
 				}
