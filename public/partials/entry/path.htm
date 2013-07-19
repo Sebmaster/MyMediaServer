@@ -1,8 +1,12 @@
 ﻿<h3>{{entry.title}}</h3>
 <form class="form-inline">
-    <select data-ng-model="assignRegex">
-        <option data-ng-repeat="(regex, desc) in availableRegexes" value="{{regex}}" data-ng-selected="assignRegex == regex">{{desc}}</option>
+    <select data-ng-model="assignMethod" data-ng-init="assignMethod = 'e'">
+        <option value="sxe">SeasonxEpisode (S01E01)</option>
+        <option value="se">SeasonEpisode (101)</option>
+        <option value="e">Episode only (01)</option>
+        <option value="numbered">numbered episode (528)</option>
     </select>
+    <input type="number" class="input-mini" data-ng-show="assignMethod == 'e'" data-ng-model="assignSeason" placeholder="Staffel" min="0">
     <button class="btn" data-ng-click="autoAssign()">Auto Assign</button>
     <button class="btn" data-ng-click="applyEpisodes()">Apply</button>
 </form>

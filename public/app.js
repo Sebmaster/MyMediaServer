@@ -288,12 +288,6 @@ EntryDetailCtrl.resolve.model.$inject = ['racer'];
 EntryDetailCtrl.$inject = ['$scope', '$routeParams', 'model', '$http', '$rootScope'];
 
 function EntryPathCtrl($scope, $routeParams, model, $http, $root) {
-	$scope.availableRegexes = {
-		'S?((\\d+)(e|x))(\\d+)': 'Season + Episode',
-		'()()()(\\d+)': 'Episode-Only'
-	};
-	$scope.assignRegex = _.keys($scope.availableRegexes)[0];
-
 	$scope.entry = model.get('entries.' + $routeParams.id);
 
 	$root.title(function () {
@@ -332,22 +326,60 @@ function EntryPathCtrl($scope, $routeParams, model, $http, $root) {
 	$scope.autoAssign = function () {
 		if ($scope.entry.seasons.length === 0) return;
 
-		var regex = new RegExp($scope.assignRegex, 'i');
+		function findSeason(needle) {
+			return _.filter($scope.entry.seasons, function (season) { return season.season == needle; })[0];
+		}
+
+		var orderedSeasons = _.filter($scope.entry.seasons, function (season) { return season.season != 0; }).sort(function (a, b) { return a.season - b.season; });
 
 		for (var i = 0; i < $scope.files.length; ++i) {
 			var file = $scope.files[i];
+			if (file.season && file.episode) continue;
 
-			var match = file.beautified.match(regex);
-			if (!match) continue;
+			var regex, match;
 
-			if (!match[2]) {
-				match[2] = null; // if no season is found, assume none
-			} else {
-				match[2] = parseInt(match[2], 10);
+			if ($scope.assignMethod === 'sxe') {
+				match = file.beautified.match(/s?((\d+)(e|x))(\d+)/i);
+				if (!match) {
+					continue;
+				}
+
+				file.season = findSeason(match[2]);
+				file.episode = parseInt(match[4], 10);
+			} else if ($scope.assignMethod === 'se') {
+				match = file.beautified.match(/(\d+)(\d{2})/i);
+				if (!match) {
+					continue;
+				}
+
+				file.season = findSeason(match[1]);
+				file.episode = parseInt(match[2], 10);
+			} else if ($scope.assignMethod === 'e') {
+				match = file.beautified.match(/(\d+)/i);
+				if (!match) {
+					continue;
+				}
+
+				file.season = findSeason($scope.assignSeason);
+				file.episode = parseInt(match[1], 10);
+			} else if ($scope.assignMethod === 'numbered') {
+				match = file.beautified.match(/(\d+)/i);
+				if (!match) {
+					continue;
+				}
+				file.episode = parseInt(match[1], 10);
+
+				var j = 0;
+				for (; j < orderedSeasons.length && file.episode > orderedSeasons[j].episodes.length; ++j) {
+					file.episode -= orderedSeasons[j].episodes.length;
+				}
+				if (j === orderedSeasons.length) {
+					file.episode = null;
+					continue;
+				}
+
+				file.season = findSeason(orderedSeasons[j].season);
 			}
-
-			file.season = _.filter($scope.entry.seasons, function (season) { return season.season == match[2]; })[0];
-			file.episode = parseInt(match[4], 10);
 		}
 	};
 
