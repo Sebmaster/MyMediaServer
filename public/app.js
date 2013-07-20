@@ -384,19 +384,24 @@ function EntryPathCtrl($scope, $routeParams, model, $http, $root) {
 	};
 
 	$scope.applyEpisodes = function () {
-		for (var i = 0; i < $scope.files.length; ++i) {
-			var file = $scope.files[i];
-			if (file.season && file.episode) {
-				var j = 0;
-				for (; j < $scope.entry.seasons.length; ++j) {
-					if ($scope.entry.seasons[j].season === file.season.season) {
-						break;
+		for (var seasonIdx = 0; seasonIdx < $scope.entry.seasons.length; ++seasonIdx) {
+			var season = $scope.entry.seasons[seasonIdx];
+
+			for (var episodeIdx = 0; episodeIdx < season.episodes.length; ++episodeIdx) {
+				var episode = season.episodes[episodeIdx];
+				var file = null;
+
+				for (var i = 0; i < $scope.files.length; ++i) {
+					if ($scope.files[i].season && $scope.files[i].season.season == season.season && $scope.files[i].episode == episode.episode) {
+						file = $scope.files[i];
 					}
 				}
-				if (j === $scope.entry.seasons.length ||
-					!$scope.entry.seasons[j].episodes[file.episode - 1]) continue;
 
-				model.set('entries.' + $scope.entry.id + '.seasons.' + j + '.episodes.' + (file.episode - 1) + '.path', file.path);
+				if (file) {
+					model.set('entries.' + $scope.entry.id + '.seasons.' + seasonIdx + '.episodes.' + episodeIdx + '.path', file.path);
+				} else {
+					model.del('entries.' + $scope.entry.id + '.seasons.' + seasonIdx + '.episodes.' + episodeIdx + '.path');
+				}
 			}
 		}
 	};
