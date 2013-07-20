@@ -170,6 +170,7 @@ module.exports = function (model) {
 							}
 
 							assignFiles(entry.entry, entry.source, res.torrents[i].files);
+							model.del('entries.' + entry.entry.id + '.sources.' + entry.entry.sources.indexOf(entry.source) + '.downloads.' + entry.idx + '.torrentId');
 
 							if (config.transmission.removeOnFinish) {
 								transmission.remove([res.torrents[i].id], false);
