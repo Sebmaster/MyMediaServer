@@ -443,7 +443,7 @@ function EntryDownloadCtrl($scope, $routeParams, model, $http, $root) {
 	};
 
 	$scope.add = function () {
-		model.push('entries.' + $routeParams.id + '.sources', $scope.source);
+		model.push('entries.' + $routeParams.id + '.sources', _.pick($scope.source, 'url', 'assignMethod', 'assignSeason', 'contains', 'regex', 'category'));
 		$scope.source = {};
 	};
 
