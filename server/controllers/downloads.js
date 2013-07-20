@@ -72,7 +72,7 @@ module.exports = function (model) {
 					continue;
 				}
 
-				file.season = findSeason(parseInt(source.assignSeason));
+				file.season = findSeason(source.assignSeason);
 				file.episode = parseInt(match[1], 10);
 			} else if (source.assignMethod === 'numbered') {
 				match = file.beautified.match(/(\d+)/i);
