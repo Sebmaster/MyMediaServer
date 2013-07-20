@@ -45,7 +45,8 @@ module.exports = function (model) {
 
 		for (var i = 0; i < files.length; ++i) {
 			var file = files[i];
-			file.beautified = file.name.replace(/\.|_/g, ' ').replace(/\d+p|\d+x\d+|\[.*?\]|FLAC|Blu-?Ray|\w264/ig, '').replace(/(\(|\[)\s+(\)|\])/g, '').replace(/\s{2,}/g, ' ');
+			var splitted = file.name.split('/');
+			file.beautified = splitted[splitted.length - 1].replace(/\.|_/g, ' ').replace(/\d+p|\d+x\d+|\[.*?\]|FLAC|Blu-?Ray|\w264/ig, '').replace(/(\(|\[)\s+(\)|\])/g, '').replace(/\s{2,}/g, ' ');
 
 			var regex, match;
 
