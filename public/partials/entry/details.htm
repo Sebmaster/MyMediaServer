@@ -62,23 +62,13 @@
 </div>
 
 <div class="fullscreen" data-ng-click="closeVideo($event)" data-ng-if="video">
-    <div data-ng-if="video.fallback == 0" class="flowplayer no-time videoPlayer" data-embed="false" data-native_fullscreen="true" data-ng-init="initFlow($event)" data-ng-click="$event.stopPropagation()">
-        <video autoplay controls>
+    <div>
+        <video class="videoPlayer" autoplay controls data-mms-fancyvid data-ng-click="$event.stopPropagation()">
             <source type="video/webm" src="/stream/{{video.src}}/webm/?size={{video.size}}">
             <source type="application/vnd.apple.mpegurl" src="/stream/{{video.src}}/hls/playlist.m3u8?size={{video.size}}">
-        </video>
-    </div>
-    <div data-ng-if="video.fallback == 1" class="flowplayer no-time videoPlayer" data-embed="false" data-flashfit="true" data-ng-init="initFlow($event)" data-ng-click="$event.stopPropagation()">
-        <video autoplay controls>
-            <source type="video/flash" src="{{origin}}stream/{{video.src}}/flv/?size={{video.size}}">
-        </video>
-    </div>
-    <div data-ng-if="video.fallback == 3" class="flowplayer videoPlayer" data-embed="false" data-native_fullscreen="true" data-ng-init="initFlow($event)" data-ng-click="$event.stopPropagation()">
-        <video autoplay controls>
+
+            <source src="/stream/{{video.src}}/flv/?size={{video.size}}">
             <source src="/stream/{{video.src}}">
         </video>
-    </div>
-    <div data-ng-if="video.fallback == 4" class="videoPlayer" data-ng-click="$event.stopPropagation()">
-        No suitable player found. Download <a href="/stream/{{video.src}}">here</a>.
     </div>
 </div>

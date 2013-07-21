@@ -54,6 +54,17 @@ angular.module('MyMediaServer', ['racer.js', 'ngSanitize']).
 			return ret;
 		};
 	}]).
+	directive('mmsFancyvid', function () {
+		return {
+			restrict: 'A',
+			link: function (scope, element, attrs) {
+				if (element.prop('tagName') !== 'VIDEO') throw new Error('fancyVid cannot operate on a non-video tag!');
+
+				var fancy = new FancyVid(element[0]);
+				fancy.autoFallback();
+			}
+		};
+	}).
 	run(['$rootScope', function ($rootScope) {
 		var _title = null;
 
