@@ -33,6 +33,7 @@ if (process.env.NODE_ENV === 'production') {
 	app.use(express.basicAuth(config.auth.user, config.auth.password, 'MyMediaServer'));
 }
 
+app.disable('x-powered-by');
 app.use(express.static(__dirname + '/public'));
 app.use(require('racer-browserchannel')(store));
 app.use(express.bodyParser());
