@@ -25,9 +25,9 @@ function prepareOptionsHls(target, targetWidth) {
 		options.splice.apply(options, [options.length - 1, 0, '-async', 1, '-vf', 'scale=min(' + targetWidth + '\\, iw):trunc(ow/a/2)*2'].concat(h264Options));
 	} else {
 		options.splice(options.length - 1, 0, '-c:v', 'copy');
+		options.splice.apply(options, [options.length - 1, 0].concat(config.transcodeParameters.misc));
 	}
 
-	options.splice.apply(options, [options.length - 1, 0].concat(config.transcodeParameters.misc));
 	return options;
 }
 
@@ -38,9 +38,9 @@ function prepareOptionsFlv(target, targetWidth) {
 		options.splice.apply(options, [options.length - 1, 0, '-vf', 'scale=min(' + targetWidth + '\\, iw):-1', '-ar', 44100].concat(h264Options));
 	} else {
 		options.splice(options.length - 1, 0, '-c:v', 'copy');
+		options.splice.apply(options, [options.length - 1, 0].concat(config.transcodeParameters.misc));
 	}
 
-	options.splice.apply(options, [options.length - 1, 0].concat(config.transcodeParameters.misc));
 	return options;
 }
 
